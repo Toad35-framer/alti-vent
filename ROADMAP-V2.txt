@@ -1,0 +1,383 @@
+================================================================
+ALTI-VENT V2 — ROADMAP DE DÉVELOPPEMENT
+================================================================
+Date de création : mai 2026
+Document de référence — à mettre à jour à chaque lot terminé
+
+OBJECTIFS GÉNÉRAUX
+------------------
+Faire passer Alti-Vent d'un outil fonctionnel à un outil
+réellement plaisant et pédagogique, en gardant la rigueur
+normative NF EN 1991-1-4 et en restant fidèle à l'esprit
+"polytraumatisés des mathématiques".
+
+Public cible : ingénieurs, charpentiers, étudiants, autodidactes.
+
+PRINCIPES DIRECTEURS
+--------------------
+1. Hiérarchie visuelle claire : numéroter les étapes du parcours
+2. Pédagogie active : tooltips, analogies physiques, "Le saviez-vous"
+3. Suggestion plutôt que prescription : l'utilisateur décide
+4. Feedback continu : statuts, validations, indicateurs de progrès
+5. Conserver l'autonomie : tout dans un seul fichier HTML, pas de
+   serveur, pas de dépendance lourde
+
+
+================================================================
+LOT 1 — FONDATIONS UI STRUCTURANTES        [✅ TERMINÉ — v2.0.0-lot1]
+================================================================
+Objectif : poser une hiérarchie visuelle claire qui guide
+l'utilisateur dans son parcours.
+
+1.1 Numérotation des étapes
+    - Card "Paramètres du site"          → ① Paramètres du site
+    - Card "Rosace orographique"         → ② Rosace orographique
+    - Card "Profil altimétrique"         → ③ Profil altimétrique
+    - Card "Synthèse par direction"      → ④ Synthèse par direction
+    - Card "Export"                      → ⑤ Export
+    Badge circulaire numéroté à gauche du titre de chaque card.
+
+1.2 Réorganisation du panneau "Paramètres du site"
+    Ordre actuel : lat / lon / rayon / pas / bouton / paste GPS / exemples
+    Ordre cible :
+      [1] Paste GPS (mis en avant, gros, premier)
+      [2] "ou saisir manuellement :" → lat + lon en mode édition fine
+      [3] Rayon (slider 300-1500 m + valeur affichée)
+      [4] Pas angulaire (15° / 22.5° / 30° / 45°)
+      [5] Bouton Analyser (grosse CTA primaire)
+      [6] Exemples préchargés
+
+1.3 Slider rayon avec valeur visible
+    - Remplacer le select par : <input type="range" min="300" max="1500" step="100">
+    - Afficher la valeur en temps réel à côté
+    - Mention sous le slider : "1000 m = couvre l'analyse cas 2 (ΔAc)"
+
+1.4 Validation lat/lon en temps réel
+    - Si lat/lon dans la grille France métropolitaine :
+      → "✓ Coordonnées en France métropolitaine — RGE ALTI disponible"
+    - Si DROM/COM ou hors France :
+      → "⚠ Hors France — l'API IGN ne couvrira pas cette zone"
+    - Si lat/lon invalides : message rouge sous le champ
+
+1.5 Cohérence de la palette de couleurs
+    Définir et appliquer la sémantique des couleurs :
+      --color-info     #1F4E79  (bleu accent — structure, neutre)
+      --color-success  #1D9E75  (vert — résultat OK, c₀=1)
+      --color-warning  #EF9F27  (ambre — attention, c₀>1 limite)
+      --color-danger   #E24B4A  (rouge — critique, c₀ élevé)
+      --color-help     #6A40A8  (violet — pédagogie, glossaire)
+    Vérifier qu'aucune autre couleur "perdue" ne traîne.
+
+
+================================================================
+LOT 2 — PÉDAGOGIE                           [✅ TERMINÉ — v2.1.1-vouvoiement]
+                                            2.1 tooltips ✓ 2.2 glossaire ✓
+                                            2.3 Pourquoi ✓ 2.4 Saviez-vous ✓
+                                            2.5 microcopy ✓
+                                            + vouvoiement intégral
+                                            + "plan de coupe principal / d'équerre"
+================================================================
+Objectif : faire dialoguer l'outil. L'utilisateur ne doit jamais
+se retrouver bloqué devant un terme technique inconnu.
+
+2.1 Tooltips au survol sur termes techniques
+    Termes à couvrir : c₀(z), ΔAc, Ac, Am, H, Lu, Ld, X,
+                       z₀, v_b,0, q_p(z), c_pe, c_pi,
+                       Catégorie de terrain, Azimut.
+    Implémentation : <span class="term" data-tooltip="...">c₀(z)</span>
+    Tooltip avec définition courte + analogie physique courte.
+    Exemple : c₀(z) → "Coefficient orographique : facteur
+                       d'amplification du vent dû au relief.
+                       Vaut 1 sur terrain plat, peut dépasser
+                       1.5 sur une falaise côtière."
+
+2.2 Glossaire dépliable en bas de page
+    Carte "📖 Glossaire et notations EC1" repliable.
+    Liste alphabétique : terme + définition + analogie +
+                          référence EC1 (§ ou figure).
+
+2.3 Encart "Pourquoi ?" sur les analyses
+    Pour chaque résultat (cas 02, 03, 04, ΔAc, H/Lu/X), ajouter
+    un bouton "?" qui ouvre un encart pédagogique avec analogie
+    physique. Style "C'est pas sorcier".
+
+2.4 Encart "Le saviez-vous ?" contextualisé
+    Au-dessus de la rosace après analyse, encart qui change
+    selon les résultats :
+      - Si falaise détectée : comparaison avec falaise connue
+      - Si site très plat : "À titre indicatif, en plaine de Beauce..."
+      - Si cas 2 ΔAc élevé : "Votre site est X m au-dessus de la
+                              moyenne — équivalent à un immeuble
+                              de N étages."
+
+2.5 Microcopy révision
+    Reformuler les messages d'état dans un ton accessible :
+      "Interrogation API IGN" → "Récupération des altitudes IGN..."
+      "Profil insuffisant" → "Pas assez de points pour analyser"
+
+
+================================================================
+LOT 3 — PROFIL ET ANALYSE (cœur métier)     [✅ TERMINÉ — v2.0.0-lot3complet]
+                                            3.1 fiches ✓ 3.2 suggestion ✓
+                                            3.3 arbre ✓ 3.4 animation ✓
+                                            3.5 popup ✓ 3.6 flèche ✓ 3.7 barres ✓
+================================================================
+Objectif : rendre la sélection du cas EC1 confortable et
+guidée, et la lecture des résultats immédiate.
+
+3.1 Présentation de l'analyse en "fiches résumées"
+    Remplacer le bloc de texte de la zone analyse par des
+    fiches stylisées :
+
+      ┌────────────────────────────────────┐
+      │ ⓘ DIAMÈTRE PRINCIPAL                │
+      │ 30° NNE ↔ 210° SSO                  │
+      │ ────────────────────                │
+      │ Pente moyenne : 16 % (9.1°)         │
+      │ → Cas 04 — Falaise                  │
+      │                                     │
+      │ H = 80 m                            │
+      │ Lu = 200 m                          │
+      │ X = 0 m  (site au sommet)           │
+      │                                     │
+      │ ✓ Calcul orographique requis        │
+      └────────────────────────────────────┘
+
+    Hiérarchie typographique nette, badges colorés.
+
+3.2 Suggestion automatique du cas EC1 (non intrusive)
+    Après analyse, surligner doucement le radio du cas le plus
+    probable détecté avec mention "Cas suggéré d'après l'analyse".
+    L'utilisateur peut suivre ou choisir autre chose.
+
+3.3 Arbre de décision "Quel cas choisir ?"
+    Bouton dépliable qui ouvre un mini-flowchart :
+      Pente < 5 % et relief < 10 m ?      → Cas 1 (plat)
+      └ Non → Sommet identifiable ?
+              ├ Oui → Versants des deux côtés ?
+              │       ├ Oui → Cas 3 (Colline)
+              │       └ Non → Cas 4 (Falaise/escarpement)
+              └ Non → Cas 2 (méthode ΔAc)
+
+3.4 Animation simple "Le vent rencontre le relief"
+    Dans les modals d'aide, ajouter un mini-canvas qui anime
+    le vent (lignes de courant) traversant le profil type
+    (colline/falaise). Esprit "C'est pas sorcier".
+
+3.5 Tooltip enrichi sur les points du profil
+    Au clic sur un point de la courbe :
+      d = -350 m
+      z = 42.3 m
+      Lat : 48.554326
+      Lon : -2.714117
+      isSea : non
+      Catégorie OSM : Cat. IIIa (résidentiel boisé)
+      [→ Ouvrir sur Google Maps] [→ Ouvrir sur Géoportail]
+
+3.6 Échelle visuelle de pente
+    À droite de chaque graphique de profil, un mini-icône SVG
+    avec une flèche inclinée selon l'angle réel de la pente
+    moyenne. Donne l'intuition physique.
+
+3.7 Barres horizontales pour les % catégories
+    À côté des % de chaque catégorie (catLeft/catRight),
+    afficher une barre horizontale colorée (style stacked-bar)
+    pour visualiser proportionnellement.
+
+
+================================================================
+LOT 4 — ROSACE ET INTERACTIONS              [✅ TERMINÉ — v2.0.0-lot3-4]
+================================================================
+Objectif : rendre l'interaction avec la rosace évidente et
+fluide.
+
+4.1 Hover effect sur les segments de la rosace
+    Au survol :
+      - Curseur pointer
+      - Segment légèrement grossi
+      - Tooltip "30° NNE — pente 2.3 % — cliquer pour voir le profil"
+
+4.2 Indicateur "Diamètre en cours d'analyse"
+    Au-dessus de la rosace, une bande visible :
+      "Analyse en cours : 30° NNE ↔ 210° SSO (principal)
+                          + 120° ESE ↔ 300° ONO (perpendiculaire)"
+
+4.3 Détection automatique des altitudes aberrantes
+    Dans run(), après fetchAllProfiles, scanner tous les
+    points : si on trouve z < -5 m (non-mer), considérer ça
+    comme aberrant.
+    - Si trouvé : afficher le bouton "Corriger" en orange
+      pulsant, avec message "⚠ N altitudes aberrantes détectées
+      (min : -1000 m) — cliquer pour corriger."
+    - Si rien : bouton caché.
+
+4.4 Icônes sur les boutons de fond de carte
+    🛰 Photo aérienne | 🗺 Plan IGN | 🌡 Analyse hauteur
+    🌳 Profil OSM    | ⊘ Aucun fond
+    Aide à scanner visuellement.
+
+
+================================================================
+LOT 5 — TABLEAU ET EXPORTS                  [✅ TERMINÉ — v2.2.0-lots5-6]
+                                            5.1 tri ✓ 5.2 filtres ✓
+                                            5.3 surbrillance ✓ 5.4 CSV intégré ✓
+================================================================
+
+5.1 Tri par colonne du tableau de synthèse
+    Cliquer sur l'en-tête trie ascendant, recliquer descendant.
+    Indicateur visuel ▲ / ▼.
+
+5.2 Filtre "directions critiques"
+    Checkbox au-dessus du tableau :
+      ☐ N'afficher que les directions avec c₀ > 1 requis
+      ☐ N'afficher que les directions avec pente > 5 %
+
+5.3 Lignes en surbrillance pour les 4 directions sélectionnées
+    Fond bleu très clair (#F2F7FB) sur les lignes des
+    directions principal + perpendiculaire actuellement
+    affichées dans le panneau profil.
+
+5.4 Bouton CSV rapproché du tableau
+    Déplacer le bouton "Exporter CSV" en haut à droite du
+    tableau (et virer la card "Export" séparée en bas).
+
+
+================================================================
+LOT 6 — CONFORT UTILISATEUR                 [⚙ PARTIEL — v2.2.0-lots5-6]
+                                            6.2 raccourcis ✓ 6.3 localStorage ✓
+                                            6.4 onboarding ✓ 6.5 progression ✓
+                                            Reste : 6.1 mode sombre
+================================================================
+
+6.1 Mode sombre
+    Toggle 🌙/☀ dans le header.
+    Variables CSS basculables : --bg, --text, --card, etc.
+    localStorage pour mémoriser le choix.
+
+6.2 Raccourcis clavier
+    - Ctrl+Enter : lancer l'analyse depuis n'importe où
+    - 1 / 2 / 3 : basculer entre les cas EC1 (02, 03, 04)
+    - Escape : fermer modal/glossaire
+    - t : toggle catégorie de terrain (si pas=15°)
+    - h : ouvrir le glossaire
+
+6.3 État sauvegardé (localStorage)
+    Mémoriser le dernier site analysé (lat, lon, rayon, pas).
+    Au prochain chargement : bouton discret
+      "Restaurer la dernière analyse (lat, lon, date)"
+
+6.4 Mode démo guidée (onboarding)
+    Au premier chargement (détection via localStorage), overlay
+    en 4 étapes avec flèches :
+      1. "Collez ici vos coordonnées GPS"
+      2. "Cliquez sur Analyser"
+      3. "Cliquez sur un rayon de la rosace pour voir le profil"
+      4. "Choisissez votre cas EC1"
+    Bouton "Passer" et "OK, c'est compris".
+    Skip définitif après première complétion.
+
+6.5 Barre de progression visuelle
+    Pendant l'analyse multi-directions, afficher une barre :
+      ███████░░░ 7/12 directions
+    Plutôt que le simple message texte.
+
+
+================================================================
+LOT 7 — RESPONSIVE ET ACCESSIBILITÉ         [⚙ PARTIEL — v2.3.0-final]
+                                            7.1 responsive mobile : ABANDONNÉ
+                                              (cible BE → desktop uniquement)
+                                            7.2 ARIA labels + focus visible ✓
+                                            7.3 favicon SVG ✓
+================================================================
+
+7.1 Responsive mobile/tablette                                [ABANDONNÉ]
+    Cible utilisateur confirmée : bureaux d'études en desktop.
+    Pas de cas d'usage tablette/mobile identifié.
+
+7.2 ARIA labels et focus visible                              [TERMINÉ]
+    - *:focus-visible global (2px var(--color-info), box-shadow)
+    - aria-label sur 22 éléments interactifs
+    - aria-live=polite sur status/pasteFeedback/profileInfo (5)
+    - rayons rosace : tabindex=0 + role=button + keydown Enter/Space
+    - aria-checked sur basemap radios (sync en JS)
+    - role=region sur tableau, role=img sur SVG rosace
+    - classe .sr-only pour textes lecteur d'écran
+
+7.3 Favicon / logo SVG                                        [TERMINÉ]
+    SVG inline 64×64 : cercle bleu + relief vert + rose à 4 branches
+    bleues + flèche Nord jaune doré. <link rel=icon data: URL>.
+
+
+================================================================
+LOT 8 — POLISSAGE                           [⚙ PARTIEL — v2.3.0-final]
+                                            8.1 disclaimer repliable : ABANDONNÉ
+                                            8.2 animations supplémentaires : ABANDONNÉ
+                                              (déjà ~85% fait via lots précédents)
+                                            8.3 microcopy finale ✓
+================================================================
+
+8.1 Disclaimer repliable                                      [ABANDONNÉ]
+    Footer mis à jour avec disclaimer en italique ambre,
+    suffisamment discret pour ne pas justifier un repli.
+
+8.2 Animations subtiles                                       [ABANDONNÉ]
+    Déjà couvert par : fadeIn/cardSlideIn onboarding,
+    ttFade tooltips, slideDown why-content, alert-pulse,
+    transitions buttons/tableau.
+
+8.3 Microcopy finale                                          [TERMINÉ]
+    - Suppression de tournures condescendantes ("simplement")
+    - Messages d'erreur reformulés en messages utiles
+      ("⚠ Les coordonnées... Vérifiez le format")
+    - Harmonisation des libellés export
+      ("Exporter ce tableau" cohérent avec "Exporter la page d'analyse")
+    - Footer enrichi du disclaimer obligatoire
+    - Fiche ΔAc complémentaire reformulée plus pédagogiquement
+      ("À titre indicatif, voici le même calcul...")
+
+
+================================================================
+ORDRE DE RÉALISATION RECOMMANDÉ
+================================================================
+
+Phase 1 (fondations) : Lot 1
+Phase 2 (cœur métier) : Lot 3 + Lot 4
+Phase 3 (pédagogie)   : Lot 2
+Phase 4 (confort)     : Lot 5 + Lot 6
+Phase 5 (qualité)     : Lot 7 + Lot 8
+
+Chaque lot doit être livré avec :
+  - Le fichier HTML version vX.Y.Z
+  - Une entrée dans CHANGELOG.md
+  - Mention dans la release GitHub
+
+
+================================================================
+NUMÉROTATION DES VERSIONS
+================================================================
+
+v1.0.x → version 1 publique (en cours)
+v2.0.0 → après livraison des lots 1, 3, 4 (refonte cœur)
+v2.1.0 → ajout du lot 2 (pédagogie)
+v2.2.0 → ajout des lots 5 et 6 (confort)
+v2.3.0 → ajout des lots 7 et 8 (qualité finale)
+
+
+================================================================
+NOTES PERSONNELLES
+================================================================
+
+- Le fichier doit rester monobloc HTML (pour le déploiement
+  simple via GitHub Pages et pour que l'utilisateur puisse
+  facilement le télécharger et l'utiliser hors-ligne après
+  premier chargement).
+- Les nouvelles dépendances doivent rester chargées via CDN
+  (chart.js, jszip) — pas d'ajout de bibliothèque massive.
+- Pour le mode sombre : utiliser un système de variables CSS
+  propre, basculable via data-theme="dark" sur <html>.
+- Pour le glossaire : envisager un fichier JSON inline ou un
+  bloc <template> caché qui contient les définitions.
+
+================================================================
+FIN DE ROADMAP
+================================================================
