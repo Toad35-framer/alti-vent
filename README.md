@@ -63,7 +63,7 @@ L'outil tourne **intégralement dans le navigateur** : pas de serveur, pas d'ins
 
 L'outil est publié via GitHub Pages :
 
-👉 **https://[VOTRE-USERNAME].github.io/alti-vent/**
+👉 **https://Toad35-framer.github.io/alti-vent/**
 
 ### Option 2 — En local
 
