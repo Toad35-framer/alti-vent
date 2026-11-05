@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0042)https://toad35-framer.github.io/alti-vent/ -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alti-Vent — Rosace orographique selon NF EN 1991-1-4</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2230%22%20fill%3D%22%23F4F5F0%22%20stroke%3D%22%231F4E79%22%20stroke-width%3D%221.5%22%2F%3E%3Cpath%20d%3D%22M4%2046%20Q14%2030%2024%2040%20Q34%2052%2044%2032%20Q54%2018%2060%2042%20L60%2062%20L4%2062%20Z%22%20fill%3D%22%23C9D4B5%22%20stroke%3D%22%235D8270%22%20stroke-width%3D%220.8%22%2F%3E%3Cg%20stroke%3D%22%231F4E79%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%3E%3Cline%20x1%3D%2232%22%20y1%3D%2210%22%20x2%3D%2232%22%20y2%3D%2226%22%2F%3E%3Cline%20x1%3D%2232%22%20y1%3D%2238%22%20x2%3D%2232%22%20y2%3D%2254%22%2F%3E%3Cline%20x1%3D%2210%22%20y1%3D%2232%22%20x2%3D%2226%22%20y2%3D%2232%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%2232%22%20x2%3D%2254%22%20y2%3D%2232%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M32%208%20L36%2030%20L32%2026%20L28%2030%20Z%22%20fill%3D%22%23EF9F27%22%20stroke%3D%22%231F4E79%22%20stroke-width%3D%220.8%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%222.5%22%20fill%3D%22%231F4E79%22%2F%3E%3C%2Fsvg%3E"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2230%22%20fill%3D%22%23F4F5F0%22%20stroke%3D%22%231F4E79%22%20stroke-width%3D%221.5%22%2F%3E%3Cpath%20d%3D%22M4%2046%20Q14%2030%2024%2040%20Q34%2052%2044%2032%20Q54%2018%2060%2042%20L60%2062%20L4%2062%20Z%22%20fill%3D%22%23C9D4B5%22%20stroke%3D%22%235D8270%22%20stroke-width%3D%220.8%22%2F%3E%3Cg%20stroke%3D%22%231F4E79%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%3E%3Cline%20x1%3D%2232%22%20y1%3D%2210%22%20x2%3D%2232%22%20y2%3D%2226%22%2F%3E%3Cline%20x1%3D%2232%22%20y1%3D%2238%22%20x2%3D%2232%22%20y2%3D%2254%22%2F%3E%3Cline%20x1%3D%2210%22%20y1%3D%2232%22%20x2%3D%2226%22%20y2%3D%2232%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%2232%22%20x2%3D%2254%22%20y2%3D%2232%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M32%208%20L36%2030%20L32%2026%20L28%2030%20Z%22%20fill%3D%22%23EF9F27%22%20stroke%3D%22%231F4E79%22%20stroke-width%3D%220.8%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%222.5%22%20fill%3D%22%231F4E79%22%2F%3E%3C%2Fsvg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   :root {
     /* === Palette V2 sémantique ===
@@ -788,13 +789,55 @@
   .badge-ok { color: var(--green); font-weight: 500; }
   .badge-ko { color: var(--red); font-weight: 500; }
   .badge-na { color: var(--gray); font-weight: 500; }
+
+  /* ===== Vue 3D (injection v3) ===== */
+  .view-toggle { display: flex; gap: 0; justify-content: center; margin-bottom: 8px; }
+  .view-toggle button { padding: 5px 16px; font-size: 12px; border-radius: 0; }
+  .view-toggle button:first-child { border-radius: 6px 0 0 6px; }
+  .view-toggle button:last-child { border-radius: 0 6px 6px 0; border-left: none; }
+  .view-toggle button.active { background: var(--accent); color: white; border-color: var(--accent); }
+  #wrap3d { position: relative; width: 100%; aspect-ratio: 400/410; background: #dfe8ef; border-radius: 6px; overflow: hidden; display: none; }
+  #canvas3d { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  #canvas3d.dragging { cursor: grabbing; }
+  .btn3d-frame { position: absolute; top: 8px; right: 8px; padding: 5px 12px; font-size: 12px; background: rgba(255,255,255,0.92); box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  #hint3d { position: absolute; left: 8px; bottom: 8px; font-size: 10px; color: #444; background: rgba(255,255,255,0.85); padding: 3px 8px; border-radius: 4px; pointer-events: none; }
+  #status3d { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 13px; color: var(--text2); background: rgba(255,255,255,0.92); padding: 8px 14px; border-radius: 6px; display: none; z-index: 2; }
+  .params3d { display: none; gap: 10px; flex-wrap: wrap; align-items: end; margin-top: 10px; padding: 10px; background: var(--formbg, #F2F7FB); border-radius: 6px; }
+  .params3d .field { min-width: 105px; flex: 1; }
+  .params3d .field label { font-size: 11px; }
+  .params3d input[type=range] { padding: 0; }
+  .params3d .rangeval { font-size: 11px; color: var(--accent); font-weight: 600; }
+  #altiEdit { display: none; margin-top: 10px; }
+  #altiEdit summary { cursor: pointer; font-size: 12px; color: var(--accent); font-weight: 500; }
+  #altiNegWarn { display: none; font-size: 11px; color: var(--color-warning, #B26B00); }
+  #altiGridWrap { overflow: auto; max-height: 260px; margin-top: 8px; border: 0.5px solid var(--border); border-radius: 6px; }
+  #altiGridWrap table { border-collapse: collapse; font-size: 10px; }
+  #altiGridWrap th { position: sticky; top: 0; background: var(--formbg, #F2F7FB); padding: 2px 4px; font-size: 9px; z-index: 1; }
+  #altiGridWrap td { padding: 1px; border: 0.5px solid #eee; }
+  #altiGridWrap input { width: 52px; padding: 2px 3px; font-size: 10px; border-radius: 3px; text-align: right; }
+  #altiGridWrap input.edited { background: #FFF3D6; border-color: var(--amber); }
+  /* ===== Recherche par adresse (injection v3.1) ===== */
+  .addr-wrap { position: relative; margin-bottom: 12px; }
+  .addr-list { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; background: white; border: 0.5px solid var(--border); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); display: none; max-height: 190px; overflow: auto; }
+  .addr-item { padding: 7px 10px; font-size: 12px; cursor: pointer; }
+  .addr-item:hover { background: var(--formbg, #F2F7FB); }
+  .addr-item.addr-empty { color: var(--text2); cursor: default; font-style: italic; }
+  /* ===== Repositionnement du site (injection v3.1) ===== */
+  .repos-row { display: flex; gap: 8px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
+  .repos-row button { font-size: 12px; padding: 5px 12px; }
+  .repos-row button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .repos-row button.repos-active { background: var(--amber, #EF9F27); color: white; border-color: var(--amber, #EF9F27); }
+  #wrap2d.repos-mode { cursor: crosshair; outline: 2px dashed var(--amber, #EF9F27); outline-offset: 2px; }
+  #wrap2d.repos-mode .rose-svg { pointer-events: none; }   /* l'épingle prime sur les clics rosace */
+  .repos-pin { position: absolute; transform: translate(-50%, -92%); font-size: 26px; pointer-events: none; z-index: 20; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.35)); animation: pinDrop 0.25s ease-out; }
+  @keyframes pinDrop { from { transform: translate(-50%, -160%); opacity: 0.4; } to { transform: translate(-50%, -92%); opacity: 1; } }
 </style>
 </head>
 <body>
 
 <header>
   <h1><span style="color: #FFD54F; font-weight: 700;">Alti-Vent</span> — Rosace orographique selon NF EN 1991-1-4</h1>
-  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude</p>
+  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude · v3.1</p>
 </header>
 
 <div class="disclaimer">
@@ -809,12 +852,13 @@
 
   <!-- Saisie principale : coller un couple GPS -->
   <div class="paste-block">
+    <div class="addr-wrap">
+      <label for="addr" class="paste-label">🔎 Recherche par adresse</label>
+      <input id="addr" type="text" class="paste-input" placeholder="Rue, ville… ex : 12 rue de la Falaise, Plérin" autocomplete="off" aria-label="Recherche du site par adresse postale" role="combobox" aria-expanded="false" aria-controls="addrList">
+      <div id="addrList" class="addr-list" role="listbox"></div>
+    </div>
     <label for="paste" class="paste-label">📍 Coordonnées GPS du site</label>
-    <input id="paste" type="text" class="paste-input"
-           placeholder="Collez vos coordonnées : 48.5510, -2.7350 (Géoportail, Google Maps…)"
-           autocomplete="off"
-           aria-label="Coordonnées GPS du site, format latitude, longitude"
-           aria-describedby="pasteFeedback">
+    <input id="paste" type="text" class="paste-input" placeholder="Collez vos coordonnées : 48.5510, -2.7350 (cartes.gouv.fr, Google Maps…)" autocomplete="off" aria-label="Coordonnées GPS du site, format latitude, longitude" aria-describedby="pasteFeedback">
     <div id="pasteFeedback" class="paste-feedback" aria-live="polite"></div>
   </div>
 
@@ -831,23 +875,21 @@
         <input id="lon" type="number" step="0.000001" value="-2.7350" aria-label="Longitude en degrés décimaux">
       </div>
     </div>
-    <div id="coordValidation" class="coord-validation" aria-live="polite"></div>
+    <div id="coordValidation" class="coord-validation valid" aria-live="polite">✓ Coordonnées en France métropolitaine — RGE ALTI® disponible</div>
   </details>
 
   <!-- Paramètres d'analyse -->
   <div class="analysis-params">
     <div class="field-slider">
       <label for="rad">Rayon d'analyse : <b id="radLabel">1000 m</b></label>
-      <input id="rad" type="range" min="300" max="1500" step="100" value="1000"
-             aria-label="Rayon d'analyse en mètres"
-             aria-valuemin="300" aria-valuemax="1500" aria-valuenow="1000">
+      <input id="rad" type="range" min="300" max="1500" step="100" value="1000" aria-label="Rayon d&#39;analyse en mètres" aria-valuemin="300" aria-valuemax="1500" aria-valuenow="1000">
       <div class="slider-hint">300 m (analyse rapide) — <b>1000 m recommandé</b> (couvre méthode ΔAc) — 1500 m</div>
     </div>
     <div class="field-row">
       <div class="field">
         <label for="step">Pas angulaire</label>
         <select id="step" aria-label="Pas angulaire entre les directions analysées">
-          <option value="30" selected>30° — 12 directions</option>
+          <option value="30" selected="">30° — 12 directions</option>
           <option value="45">45° — 8 directions</option>
           <option value="22.5">22.5° — 16 directions</option>
           <option value="15">15° — 24 directions (requis pour catégories de terrain)</option>
@@ -855,9 +897,9 @@
       </div>
       <div class="field">
         <label for="sampling">Échantillonnage</label>
-        <select id="sampling" aria-label="Densité d'échantillonnage altimétrique par direction">
+        <select id="sampling" aria-label="Densité d&#39;échantillonnage altimétrique par direction">
           <option value="11">11 points (tous les 100 m)</option>
-          <option value="21" selected>21 points (tous les 50 m)</option>
+          <option value="21" selected="">21 points (tous les 50 m)</option>
           <option value="41">41 points (tous les 25 m)</option>
         </select>
       </div>
@@ -865,27 +907,26 @@
   </div>
 
   <!-- CTA Analyse -->
-  <button id="run" class="primary big-cta" aria-label="Lancer l'analyse orographique du site (raccourci Ctrl+Entrée)">
+  <button id="run" class="primary big-cta" aria-label="Lancer l&#39;analyse orographique du site (raccourci Ctrl+Entrée)">
     <span style="font-size:16px;" aria-hidden="true">▶</span> Analyser le site
   </button>
 
   <!-- V2 — Bouton restauration de la dernière analyse -->
-  <div id="restoreLast" class="restore-last" style="display:none;">
-    <button id="restoreLastBtn" type="button" class="restore-btn"
-            aria-label="Restaurer la dernière analyse depuis le stockage local">
+  <div id="restoreLast" class="restore-last" style="display: flex;">
+    <button id="restoreLastBtn" type="button" class="restore-btn" aria-label="Restaurer la dernière analyse depuis le stockage local">
       <span aria-hidden="true">⏮</span> Restaurer la dernière analyse
     </button>
-    <span id="restoreLastInfo" class="restore-info"></span>
+    <span id="restoreLastInfo" class="restore-info">47.4384, 0.3700 · r=1000 m · 17/06/2026 à 15:41</span>
   </div>
 
   <!-- Exemples préchargés -->
   <div class="examples">
     <span class="examples-label">Charger un exemple :</span>
-    <button onclick="loadEx(48.5510,-2.7350,'Plérin (falaise)')">🌊 Plérin (falaise)</button>
-    <button onclick="loadEx(48.6489,-2.0258,'Saint-Malo (côte plate)')">🏖 Saint-Malo</button>
-    <button onclick="loadEx(45.8326,6.8652,'Chamonix (vallée alpine)')">⛰ Chamonix</button>
-    <button onclick="loadEx(48.8584,2.2945,'Tour Eiffel (urbain plat)')">🏙 Tour Eiffel</button>
-    <button onclick="loadEx(43.5524,1.4773,'Toulouse (plaine)')">🌾 Toulouse</button>
+    <button onclick="loadEx(48.5510,-2.7350,&#39;Plérin (falaise)&#39;)">🌊 Plérin (falaise)</button>
+    <button onclick="loadEx(48.6489,-2.0258,&#39;Saint-Malo (côte plate)&#39;)">🏖 Saint-Malo</button>
+    <button onclick="loadEx(45.8326,6.8652,&#39;Chamonix (vallée alpine)&#39;)">⛰ Chamonix</button>
+    <button onclick="loadEx(48.8584,2.2945,&#39;Tour Eiffel (urbain plat)&#39;)">🏙 Tour Eiffel</button>
+    <button onclick="loadEx(43.5524,1.4773,&#39;Toulouse (plaine)&#39;)">🌾 Toulouse</button>
   </div>
 </div>
 
@@ -894,6 +935,10 @@
 <div class="grid">
   <div class="card">
     <div class="panel-title"><span class="step-badge">2</span>Rosace orographique sur fond de carte IGN</div>
+    <div class="view-toggle" role="radiogroup" aria-label="Basculer entre la vue 2D et la vue 3D">
+      <button id="btnView2d" class="active" role="radio" aria-checked="true">Vue 2D</button>
+      <button id="btnView3d" role="radio" aria-checked="false">Vue 3D</button>
+    </div>
     <div class="basemap-toggle" role="radiogroup" aria-label="Choix du fond de carte sous la rosace">
       <button data-bm="ortho" class="active" role="radio" aria-checked="true" aria-label="Fond photo aérienne IGN"><span class="bm-icon" aria-hidden="true">🛰</span> Photo aérienne</button>
       <button data-bm="plan" role="radio" aria-checked="false" aria-label="Fond plan IGN"><span class="bm-icon" aria-hidden="true">🗺</span> Plan IGN</button>
@@ -922,13 +967,54 @@
       <div class="sel-main">Plan de coupe principal : <b id="selMainAz"></b></div>
       <div class="sel-perp">+ plan de coupe d'équerre : <b id="selPerpAz"></b></div>
     </div>
-    <div class="rose-wrapper">
+    <div class="rose-wrapper" id="wrap2d">
       <img id="basemap" class="rose-bg" alt="Fond de carte IGN centré sur le site analysé">
       <svg id="rose" class="rose-svg" viewBox="0 0 400 410" role="img" aria-label="Rosace orographique : chaque rayon représente la pente moyenne du terrain dans une direction. Cliquer sur un rayon affiche le profil détaillé."></svg>
     </div>
+    <div id="wrap3d">
+      <canvas id="canvas3d"></canvas>
+      <button id="btnFrame" class="btn3d-frame" title="Réinitialiser le point de vue">⌖ Cadrer</button>
+      <div id="hint3d">🖱 Glisser : tourner · Clic droit / Maj : déplacer · Molette : zoom · Clic sur une extrémité : profil + coupes</div>
+      <div id="status3d"></div>
+    </div>
+    <div class="params3d" id="params3d">
+      <div class="field">
+        <label>Maillage terrain</label>
+        <select id="p3dGrid">
+          <option value="5">5 × 5</option>
+          <option value="8">8 × 8</option>
+          <option value="10" selected>10 × 10</option>
+          <option value="12">12 × 12</option>
+          <option value="15">15 × 15</option>
+          <option value="20">20 × 20</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Exagération verticale <span class="rangeval" id="p3dExagVal">×1.5</span></label>
+        <input id="p3dExag" type="range" min="0.5" max="5" step="0.25" value="1.5">
+      </div>
+      <div class="field">
+        <label>Hauteur rosace / sol <span class="rangeval" id="p3dHVal">15 m</span></label>
+        <input id="p3dH" type="range" min="0" max="150" step="5" value="15">
+      </div>
+      <button id="p3dRebuild" class="primary" style="font-size:12px;">Recalculer le maillage</button>
+    </div>
+    <div class="repos-row">
+      <button id="btnRepos" disabled title="Replacer le point de référence directement sur la carte">📍 Repositionner le site</button>
+      <button id="btnReposOk" disabled class="primary" title="Recalculer les coordonnées GPS et toute l'orographie sur la nouvelle position">✓ Valider le repositionnement</button>
+    </div>
+    <details id="altiEdit">
+      <summary>🔧 Corriger les altitudes du maillage 3D (en cas d'anomalie IGN)</summary>
+      <p style="font-size:11px; color:var(--text2); margin:6px 0;">Valeurs en m NGF, lignes = Nord → Sud, colonnes = Ouest → Est. Une case modifiée devient orange ; le rendu 3D se met à jour immédiatement. Le bouton 🌊 écrête <b>à la fois</b> le maillage 3D et les profils de calcul EC1 (rosace, coupes, ΔA<sub>c</sub>) — les corrections manuelles case par case, elles, ne touchent que le rendu 3D. Attention aux vraies dépressions (Camargue, polders) : là, ne pas écrêter.</p>
+      <div style="margin-bottom:6px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <button id="altiReset3d" style="font-size:11px; padding:3px 10px;">↺ Réinitialiser aux valeurs IGN</button>
+        <button id="altiClamp0" style="font-size:11px; padding:3px 10px;" title="Ramène toute altitude négative à 0 m NGF — maillage 3D ET profils EC1 (rosace, coupes, ΔAc)">🌊 Tout &lt; 0 m → 0 m (rosace + terrain)</button>
+        <span id="altiNegWarn"></span>
+      </div>
+      <div id="altiGridWrap"></div>
+    </details>
     <div class="altitude-fix">
-      <button id="clampAllBtn" class="clamp-btn" disabled title="Force toutes les altitudes < 0 m à 0 m (utile en cas de valeurs aberrantes du MNT)"
-              aria-label="Corriger les altitudes négatives en les ramenant à zéro (utile en cas d'artefact côtier)">
+      <button id="clampAllBtn" class="clamp-btn" disabled="" title="Force toutes les altitudes &lt; 0 m à 0 m (utile en cas de valeurs aberrantes du MNT)" aria-label="Corriger les altitudes négatives en les ramenant à zéro (utile en cas d&#39;artefact côtier)">
         <span class="clamp-icon" aria-hidden="true">⛰</span> Corriger les altitudes &lt; 0 m
       </button>
       <span id="clampStatus" class="clamp-status"></span>
@@ -954,7 +1040,7 @@
         🌳 Quel cas choisir ?
       </button>
       <label class="terrain-toggle" id="terrainToggleLabel">
-        <input type="checkbox" id="terrainToggle" disabled>
+        <input type="checkbox" id="terrainToggle" disabled="">
         <span><span class="term" data-term="cat">Catégorie de terrain</span> <small id="terrainHint" style="color:var(--text2); font-weight:400;">(requiert pas 15°)</small></span>
       </label>
     </div>
@@ -1065,25 +1151,25 @@
     </div>
     <div id="profileInfo" style="font-size: 12px; color: var(--text2); margin-top: 12px;" aria-live="polite">Cliquez sur un segment de la rosace pour voir le profil détaillé.</div>
     <div class="profile-export">
-      <button id="exportProfileSVG" disabled aria-label="Exporter la page d'analyse au format SVG vectoriel">Exporter la page d'analyse (SVG)</button>
-      <button id="exportProfileDOCX" disabled aria-label="Exporter la page d'analyse au format Word (DOCX)">Exporter la page d'analyse (DOCX)</button>
+      <button id="exportProfileSVG" disabled="" aria-label="Exporter la page d&#39;analyse au format SVG vectoriel">Exporter la page d'analyse (SVG)</button>
+      <button id="exportProfileDOCX" disabled="" aria-label="Exporter la page d&#39;analyse au format Word (DOCX)">Exporter la page d'analyse (DOCX)</button>
     </div>
   </div>
 </div>
 
 <div class="card">
   <h2><span class="step-badge" aria-hidden="true">4</span>Synthèse par direction</h2>
-  <div id="tableContainer" style="overflow-x: auto;" role="region" aria-label="Tableau de synthèse par direction d'azimut">
+  <div id="tableContainer" style="overflow-x: auto;" role="region" aria-label="Tableau de synthèse par direction d&#39;azimut">
     <p style="color: var(--text3); font-size: 13px; margin: 0;">Les résultats s'afficheront ici après l'analyse.</p>
   </div>
 </div>
 
 <!-- Bouton d'export CSV (caché, déclenché par la toolbar du tableau) -->
-<button id="exportCSV" disabled style="display:none;" aria-hidden="true" tabindex="-1"></button>
+<button id="exportCSV" disabled="" style="display:none;" aria-hidden="true" tabindex="-1"></button>
 
 <details class="card glossary-card">
   <summary aria-label="Glossaire et notations EC1 — cliquer pour développer">📖 Glossaire et notations EC1 — cliquer pour développer</summary>
-  <div id="glossaryGrid" class="gloss-grid"></div>
+  <div id="glossaryGrid" class="gloss-grid"><div class="gloss-entry" id="gloss-c0z">  <div class="gloss-name">c₀(z)</div>  <div class="gloss-def">Coefficient orographique. Facteur d'amplification du vent dû au relief autour du site.</div><div class="gloss-analogy">Imagine le vent comme un courant d'eau dans une rivière qui rencontre un rocher : il accélère par-dessus. Sur terrain plat, c₀ = 1 ; sur une falaise côtière, c₀ peut dépasser 1.5.</div>  <div class="gloss-ref">NF EN 1991-1-4 §4.3.3 et Annexe A</div></div><div class="gloss-entry" id="gloss-dAc">  <div class="gloss-name">ΔA_c</div>  <div class="gloss-def">Altitude relative du site par rapport à la moyenne pondérée du relief environnant.</div><div class="gloss-analogy">Vous mesurez à quel point votre site est « haut » ou « bas » par rapport à la moyenne des 8 points cardinaux à 500 m et 1000 m. Site plus haut → vent accéléré ; site plus bas → vent abrité.</div>  <div class="gloss-ref">Annexe Nationale française à NF EN 1991-1-4</div></div><div class="gloss-entry" id="gloss-Ac">  <div class="gloss-name">A_c</div>  <div class="gloss-def">Altitude du site analysé (point central).</div><div class="gloss-analogy">L'altitude de votre point GPS, lue sur le MNT de l'IGN.</div>  <div class="gloss-ref">NF EN 1991-1-4 — méthode ΔA_c</div></div><div class="gloss-entry" id="gloss-Am">  <div class="gloss-name">A_m</div>  <div class="gloss-def">Altitude moyenne pondérée des 8 points cardinaux situés à 500 m et 1000 m du site, plus le site lui-même : A_m = (2·A_c + A_N1 + A_N2 + A_E1 + A_E2 + A_S1 + A_S2 + A_O1 + A_O2) / 10.</div><div class="gloss-analogy">C'est l'altitude moyenne du « voisinage » du site, calculée selon une recette précise donnée par la norme.</div>  <div class="gloss-ref">NF EN 1991-1-4 — méthode ΔA_c</div></div><div class="gloss-entry" id="gloss-H">  <div class="gloss-name">H</div>  <div class="gloss-def">Hauteur de l'obstacle (colline ou falaise) mesurée depuis le pied au vent jusqu'au sommet ou au plateau.</div><div class="gloss-analogy">C'est la « marche d'escalier » à laquelle le vent est confronté. Plus elle est haute, plus le vent doit faire un effort pour la franchir.</div>  <div class="gloss-ref">NF EN 1991-1-4 Annexe A, Figure A.2 (colline) et A.3 (falaise)</div></div><div class="gloss-entry" id="gloss-Lu">  <div class="gloss-name">L_u</div>  <div class="gloss-def">Longueur horizontale du versant au vent, mesurée du pied au sommet (ou au bord du plateau pour une falaise).</div><div class="gloss-analogy">C'est la longueur de la « rampe » que le vent doit grimper. Une rampe courte et haute = pente raide = vent fortement accéléré.</div>  <div class="gloss-ref">NF EN 1991-1-4 Annexe A</div></div><div class="gloss-entry" id="gloss-Ld">  <div class="gloss-name">L_d</div>  <div class="gloss-def">Longueur horizontale du versant sous le vent (côté opposé du sommet par rapport au vent).</div><div class="gloss-analogy">C'est la « descente » derrière le sommet. Pour une colline, elle existe ; pour une falaise, elle est absente (plateau supérieur).</div>  <div class="gloss-ref">NF EN 1991-1-4 Annexe A</div></div><div class="gloss-entry" id="gloss-X">  <div class="gloss-name">X</div>  <div class="gloss-def">Distance horizontale du site au sommet de l'obstacle, comptée positivement vers la droite et négativement vers la gauche sur le profil. X = 0 si le site est exactement au sommet.</div><div class="gloss-analogy">C'est votre « écart au sommet ». Selon votre position, vous pouvez être sur le versant au vent (X&lt;0), exactement au sommet (X=0), ou sur le versant sous le vent (X&gt;0).</div>  <div class="gloss-ref">NF EN 1991-1-4 Annexe A</div></div><div class="gloss-entry" id="gloss-z0">  <div class="gloss-name">z₀</div>  <div class="gloss-def">Longueur de rugosité du terrain. Hauteur fictive caractéristique des obstacles au sol (herbe, bâtiments…).</div><div class="gloss-analogy">C'est la « taille moyenne des bosses » au sol. Une plage : z₀ ≈ 0.003 m. Une ville dense : z₀ ≈ 1 m. Plus z₀ est grand, plus le vent est freiné près du sol.</div>  <div class="gloss-ref">NF EN 1991-1-4 §4.3.2 et Annexe Nationale</div></div><div class="gloss-entry" id="gloss-vb0">  <div class="gloss-name">v_b,0</div>  <div class="gloss-def">Vitesse de référence du vent à 10 m au-dessus d'un terrain de catégorie II, valeur fondamentale dépendant de la région française.</div><div class="gloss-analogy">C'est la « vitesse caractéristique » mesurée par convention sur un terrain dégagé, à hauteur standard, dans votre région (zone 1 à 4 en France).</div>  <div class="gloss-ref">NF EN 1991-1-4 Annexe Nationale, carte des régions de vent</div></div><div class="gloss-entry" id="gloss-qpz">  <div class="gloss-name">q_p(z)</div>  <div class="gloss-def">Pression dynamique de pointe du vent à la hauteur z. C'est la sortie finale du calcul EC1 vent.</div><div class="gloss-analogy">C'est la « pression maximale » que votre bâtiment subira, exprimée en N/m². C'est cette valeur qui sert à dimensionner la charpente.</div>  <div class="gloss-ref">NF EN 1991-1-4 §4.5</div></div><div class="gloss-entry" id="gloss-cpe">  <div class="gloss-name">c_pe</div>  <div class="gloss-def">Coefficient de pression extérieure. Indique si la surface est en surpression (vent qui pousse) ou en dépression (vent qui aspire).</div><div class="gloss-analogy">Sur la façade au vent, c_pe &gt; 0 (le vent pousse). Sur les façades latérales et la toiture, c_pe &lt; 0 (le vent aspire — c'est souvent là que le toit s'envole).</div>  <div class="gloss-ref">NF EN 1991-1-4 §7</div></div><div class="gloss-entry" id="gloss-cpi">  <div class="gloss-name">c_pi</div>  <div class="gloss-def">Coefficient de pression intérieure. Dépend des ouvertures (portes, fenêtres) et de leur taille relative.</div><div class="gloss-analogy">Si une porte est ouverte côté vent, l'intérieur passe en surpression : c_pi &gt; 0. Si elle est ouverte côté sous-le-vent : dépression intérieure, c_pi &lt; 0.</div>  <div class="gloss-ref">NF EN 1991-1-4 §7.2.9</div></div><div class="gloss-entry" id="gloss-cat">  <div class="gloss-name">Catégorie de terrain</div>  <div class="gloss-def">Classement du sol selon sa rugosité, sur un faisceau de ±15° autour de la direction du vent. Cinq catégories : 0 (mer), II (campagne), IIIa (banlieue / forêt), IIIb (zone urbaine), IV (centre-ville dense).</div><div class="gloss-analogy">Plus le terrain est « bosselé » par des bâtiments ou arbres, plus le vent est freiné en bas. Une grande ville frappe votre bâtiment moins fort qu'une plaine ouverte.</div>  <div class="gloss-ref">NF EN 1991-1-4 §4.3.2 (tableau 4.1)</div></div><div class="gloss-entry" id="gloss-azimut">  <div class="gloss-name">Azimut</div>  <div class="gloss-def">Direction angulaire dans le plan horizontal, comptée en degrés depuis le Nord en sens horaire (Nord = 0°, Est = 90°, Sud = 180°, Ouest = 270°).</div><div class="gloss-analogy">C'est la « direction d'où vient le vent » sur une boussole. 0° = vent du Nord, 180° = vent du Sud, etc.</div>  <div class="gloss-ref">Convention météorologique standard</div></div></div>
 </details>
 
 <div class="peda">
@@ -1121,20 +1207,20 @@
         <!-- 4 pictogrammes circulaires CC / BY / NC / ND -->
         <g font-family="Arial, Helvetica, sans-serif" font-weight="700">
           <!-- CC -->
-          <circle cx="16" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"/>
+          <circle cx="16" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"></circle>
           <text x="16" y="21" font-size="14" text-anchor="middle" fill="#1F4E79">cc</text>
           <!-- BY (personnage stylisé) -->
-          <circle cx="52" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"/>
-          <circle cx="52" cy="11" r="2.4" fill="#1F4E79"/>
-          <path d="M46 24 L46 18 Q46 14 52 14 Q58 14 58 18 L58 24 M49 24 L49 28 M55 24 L55 28" stroke="#1F4E79" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="52" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"></circle>
+          <circle cx="52" cy="11" r="2.4" fill="#1F4E79"></circle>
+          <path d="M46 24 L46 18 Q46 14 52 14 Q58 14 58 18 L58 24 M49 24 L49 28 M55 24 L55 28" stroke="#1F4E79" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
           <!-- NC ($ barré) -->
-          <circle cx="88" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"/>
+          <circle cx="88" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"></circle>
           <text x="88" y="22" font-size="15" text-anchor="middle" fill="#1F4E79">$</text>
-          <line x1="78" y1="6" x2="98" y2="26" stroke="#1F4E79" stroke-width="2"/>
+          <line x1="78" y1="6" x2="98" y2="26" stroke="#1F4E79" stroke-width="2"></line>
           <!-- ND (= horizontal) -->
-          <circle cx="124" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"/>
-          <line x1="116" y1="13" x2="132" y2="13" stroke="#1F4E79" stroke-width="2.4"/>
-          <line x1="116" y1="19" x2="132" y2="19" stroke="#1F4E79" stroke-width="2.4"/>
+          <circle cx="124" cy="16" r="15" fill="#fff" stroke="#1F4E79" stroke-width="1.4"></circle>
+          <line x1="116" y1="13" x2="132" y2="13" stroke="#1F4E79" stroke-width="2.4"></line>
+          <line x1="116" y1="19" x2="132" y2="19" stroke="#1F4E79" stroke-width="2.4"></line>
         </g>
       </svg>
       <span class="cc-text">Licence Creative Commons <b>BY-NC-ND 4.0</b> — Attribution, Pas d'utilisation commerciale, Pas de modification · © 2026 Jean Pineau</span>
@@ -1143,9 +1229,277 @@
 </footer>
 
 <script>
-const API_ALTI = 'https://data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevationLine.json';
-const RES = 'ign_rge_alti_wld';
-const WMTS = 'https://data.geopf.fr/wmts';
+/* ============================================================================
+   ACCÈS GÉOPLATEFORME IGN — couche réseau centralisée (v3.1, octobre 2026)
+   ============================================================================
+   Contexte : le site Géoportail a été remplacé par cartes.gouv.fr. Les services
+   de données restent servis par la Géoplateforme (data.geopf.fr), mais soumis à
+   une limite d'usage stricte : dépassement → HTTP 429 et blocage de 5 secondes.
+
+   Tous les accès IGN d'Alti-Vent passent désormais par ce bloc unique :
+     - adresses des services regroupées dans GPF (un seul endroit à modifier) ;
+     - file d'attente commune pour l'altimétrie (profils EC1 + maillage 3D) ;
+     - délai maximal par requête, nouvelles tentatives sur 429 / 5xx / coupure ;
+     - contrôle du format de réponse avant tout calcul ;
+     - tuiles WMTS avec délai maximal (une tuile bloquée ne fige plus l'outil).
+   Les anciens noms (API_ALTI, RES, WMTS…) restent disponibles comme alias :
+   le reste du code Alti-Vent n'est pas modifié.
+   ============================================================================ */
+const ALTI_VENT_VERSION = '3.1';
+
+const GPF = {
+  alti: {
+    line:   'https://data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevationLine.json',
+    points: 'https://data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevation.json',
+    resource: 'ign_rge_alti_wld',
+    method: 'GET',          // bascule automatiquement sur 'POST' si le service refuse GET (HTTP 405)
+    minIntervalMs: 340,     // ≈ 3 requêtes/s — limite IGN : 5 requêtes/s par adresse IP
+    timeoutMs: 20000,
+    retries: 3
+  },
+  wmts: {
+    url: 'https://data.geopf.fr/wmts',
+    tms: 'PM',              // nom historique de la pyramide Web Mercator
+    tmsAlt: 'PM_0_19',      // nom annoncé par la configuration IGN 2026 (repli automatique)
+    tmsLocked: false,
+    timeoutMs: 8000
+  },
+  geocode: { url: 'https://data.geopf.fr/geocodage', timeoutMs: 8000 },
+  viewer: 'https://cartes.gouv.fr/explorer-les-cartes'   // remplace www.geoportail.gouv.fr/carte
+};
+
+// Alias historiques — conservés pour le code existant
+const API_ALTI = GPF.alti.line;
+const RES = GPF.alti.resource;
+const WMTS = GPF.wmts.url;
+
+function gpfSleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function gpfQuery(params) {
+  // encodeURIComponent transforme le séparateur « | » en %7C : forme acceptée par tous les relais
+  return Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+}
+
+function gpfCoord(v) { return Number(v).toFixed(7); }   // 7 décimales ≈ 1 cm, jamais de notation 1e-7
+
+function gpfAltiLineURL(lon0, lat0, lon1, lat1, sampling) {
+  return GPF.alti.line + '?' + gpfQuery({
+    lon: gpfCoord(lon0) + '|' + gpfCoord(lon1),
+    lat: gpfCoord(lat0) + '|' + gpfCoord(lat1),
+    resource: GPF.alti.resource,
+    delimiter: '|', indent: 'false', measures: 'false',
+    profile_mode: 'simple', sampling: sampling
+  });
+}
+
+// Corps JSON équivalents, pour le repli en méthode POST (documentée par l'IGN)
+function gpfAltiLineBody(lon0, lat0, lon1, lat1, sampling) {
+  return { lon: gpfCoord(lon0) + '|' + gpfCoord(lon1), lat: gpfCoord(lat0) + '|' + gpfCoord(lat1),
+           resource: GPF.alti.resource, delimiter: '|', indent: 'false', measures: 'false',
+           zonly: 'false', profile_mode: 'simple', sampling: sampling };
+}
+function gpfAltiPointsBody(pts) {
+  return { lon: pts.map(p => gpfCoord(p.lon)).join('|'), lat: pts.map(p => gpfCoord(p.lat)).join('|'),
+           resource: GPF.alti.resource, delimiter: '|', indent: 'false', measures: 'false', zonly: 'false' };
+}
+
+function gpfAltiPointsURL(pts) {
+  return GPF.alti.points + '?' + gpfQuery({
+    lon: pts.map(p => gpfCoord(p.lon)).join('|'),
+    lat: pts.map(p => gpfCoord(p.lat)).join('|'),
+    resource: GPF.alti.resource,
+    delimiter: '|', indent: 'false', measures: 'false', zonly: 'false'
+  });
+}
+
+function gpfError(kind, message, status) {
+  const e = new Error(message);
+  e.gpfKind = kind;          // 'limite' | 'serveur' | 'requete' | 'delai' | 'reseau' | 'format'
+  e.gpfStatus = status || 0;
+  return e;
+}
+
+// Petit bandeau d'information réseau, placé sous la zone d'état (créé à la demande)
+function gpfNotify(text) {
+  let el = document.getElementById('gpfNote');
+  if (!el) {
+    const anchor = document.getElementById('status');
+    if (!anchor || !anchor.parentNode) return;
+    el = document.createElement('div');
+    el.id = 'gpfNote';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.style.cssText = 'display:none;font-size:12px;color:#7a4a00;background:var(--color-warning-bg);' +
+                       'border-left:3px solid var(--color-warning);border-radius:4px;padding:6px 12px;margin:-6px 0 12px;';
+    anchor.parentNode.insertBefore(el, anchor.nextSibling);
+  }
+  el.textContent = text || '';
+  el.style.display = text ? 'block' : 'none';
+}
+
+// File d'attente commune de l'altimétrie : au moins minIntervalMs entre deux départs
+// de requêtes, que la demande vienne de l'analyse EC1 ou du maillage 3D.
+let gpfAltiChain = Promise.resolve();
+let gpfAltiNextSlot = 0;
+function gpfAltiSlot() {
+  const p = gpfAltiChain.then(async () => {
+    const wait = gpfAltiNextSlot - Date.now();
+    if (wait > 0) await gpfSleep(wait);
+    gpfAltiNextSlot = Date.now() + GPF.alti.minIntervalMs;
+  });
+  gpfAltiChain = p.catch(() => {});
+  return p;
+}
+
+/**
+ * Requête JSON vers la Géoplateforme, avec délai maximal et nouvelles tentatives.
+ * opt : { service, throttle (file altimétrie), retries, timeoutMs, postBody (repli POST si GET refusé) }
+ * En cas d'échec définitif, lève une erreur dont le message est lisible par l'utilisateur.
+ */
+async function gpfFetchJSON(url, opt) {
+  opt = opt || {};
+  const service = opt.service || 'IGN';
+  const retries = opt.retries !== undefined ? opt.retries : GPF.alti.retries;
+  const timeoutMs = opt.timeoutMs || GPF.alti.timeoutMs;
+  let lastErr = null;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    if (opt.throttle) await gpfAltiSlot();
+    const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
+    let waitMs = 0;
+    try {
+      const usePost = !!opt.postBody && GPF.alti.method === 'POST';
+      const init = usePost
+        ? { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(opt.postBody) }
+        : {};
+      if (ctrl) init.signal = ctrl.signal;
+      const r = await fetch(usePost ? url.split('?')[0] : url, init);
+      if (r.status === 405 && opt.postBody && !usePost) {
+        // Le service refuse la méthode GET : on rejoue la même demande en POST, sans consommer de tentative
+        GPF.alti.method = 'POST';
+        attempt--;
+        continue;
+      }
+      if (r.ok) {
+        let data;
+        try { data = await r.json(); }
+        catch (e) {
+          if (e && e.name === 'AbortError') throw e;
+          throw gpfError('format', 'réponse illisible du service ' + service + ' (JSON attendu)', r.status);
+        }
+        if (attempt > 0) gpfNotify('');
+        return data;
+      }
+      if (r.status === 429 || r.status >= 500) {
+        const ra = parseFloat(r.headers.get('retry-after'));
+        waitMs = (isFinite(ra) && ra > 0 ? ra * 1000 : (r.status === 429 ? 5000 : 1500 * (attempt + 1))) + 500;
+        lastErr = r.status === 429
+          ? gpfError('limite', 'le service ' + service + ' limite le débit (HTTP 429). Patientez quelques secondes puis relancez.', 429)
+          : gpfError('serveur', 'le service ' + service + ' est momentanément indisponible (HTTP ' + r.status + ').', r.status);
+      } else {
+        let detail = '';
+        try { detail = (await r.text()).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140); } catch (e) {}
+        const err = gpfError('requete', 'requête refusée par le service ' + service + ' (HTTP ' + r.status + ')' + (detail ? ' — ' + detail : ''), r.status);
+        err.gpfFinal = true;
+        throw err;
+      }
+    } catch (e) {
+      if (e && (e.gpfFinal || e.gpfKind === 'format')) throw e;
+      if (e && e.name === 'AbortError') {
+        lastErr = gpfError('delai', 'pas de réponse du service ' + service + ' après ' + Math.round(timeoutMs / 1000) + ' s.');
+        waitMs = 1000;
+      } else {
+        // Échec réseau : coupure, pare-feu, ou blocage 429 renvoyé sans en-têtes CORS
+        lastErr = gpfError('reseau', 'service ' + service + ' injoignable (connexion coupée, pare-feu, ou accès bloqué par le navigateur).');
+        waitMs = attempt === 0 ? 2000 : 5500;
+      }
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+
+    if (attempt < retries) {
+      gpfNotify('Service ' + service + ' : nouvelle tentative dans ' + Math.ceil(waitMs / 1000) + ' s (' + (attempt + 1) + ' / ' + retries + ')…');
+      if (opt.throttle) gpfAltiNextSlot = Math.max(gpfAltiNextSlot, Date.now() + waitMs);
+      else await gpfSleep(waitMs);
+    }
+  }
+  gpfNotify('');
+  throw lastErr;
+}
+
+// Contrôle du format de réponse altimétrique avant tout calcul
+function gpfElevations(data, expected) {
+  if (!data || !Array.isArray(data.elevations) || data.elevations.length === 0) {
+    throw gpfError('format', 'réponse inattendue du service altimétrie IGN (liste « elevations » absente).');
+  }
+  if (expected && data.elevations.length !== expected) {
+    throw gpfError('format', 'réponse incomplète du service altimétrie IGN (' + data.elevations.length + ' altitudes reçues pour ' + expected + ' demandées).');
+  }
+  return data.elevations;
+}
+
+function gpfIsNoData(z) { return z === -99999 || typeof z !== 'number' || !isFinite(z); }
+
+// ---- Tuiles WMTS ----
+function gpfTileURL(bm, zoom, row, col, tms) {
+  return GPF.wmts.url + '?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0' +
+         '&LAYER=' + encodeURIComponent(bm.layer) + '&STYLE=' + (bm.style || 'normal') +
+         '&FORMAT=' + encodeURIComponent(bm.format) +
+         '&TILEMATRIXSET=' + (tms || GPF.wmts.tms) + '&TILEMATRIX=' + zoom +
+         '&TILEROW=' + row + '&TILECOL=' + col;
+}
+
+// Renvoie { img, timedOut } : img vaut null si la tuile est refusée ou sans réponse dans le délai
+function gpfLoadImage(url, timeoutMs) {
+  return new Promise(resolve => {
+    const img = new Image();
+    let done = false;
+    const finish = (ok, timedOut) => {
+      if (done) return;
+      done = true; clearTimeout(t);
+      resolve({ img: ok ? img : null, timedOut: !!timedOut });
+    };
+    const t = setTimeout(() => { finish(false, true); img.src = ''; }, timeoutMs);
+    img.crossOrigin = 'anonymous';
+    img.onload = () => finish(true);
+    img.onerror = () => finish(false);
+    img.src = url;
+  });
+}
+
+// Charge une tuile ; renvoie l'image ou null. Tant qu'aucune tuile n'a été reçue,
+// un refus du serveur déclenche un essai avec l'autre nom de pyramide (PM ↔ PM_0_19).
+// Une tuile sans réponse (délai dépassé) n'est pas réessayée : le service est alors injoignable.
+async function gpfLoadTile(bm, zoom, row, col) {
+  const w = GPF.wmts;
+  let r = await gpfLoadImage(gpfTileURL(bm, zoom, row, col, w.tms), w.timeoutMs);
+  if (r.img) { w.tmsLocked = true; return r.img; }
+  if (!r.timedOut && !w.tmsLocked && w.tmsAlt) {
+    r = await gpfLoadImage(gpfTileURL(bm, zoom, row, col, w.tmsAlt), w.timeoutMs);
+    if (r.img && !w.tmsLocked) {
+      const old = w.tms; w.tms = w.tmsAlt; w.tmsAlt = old; w.tmsLocked = true;
+    }
+  }
+  return r.img;
+}
+
+// Signale un fond de carte incomplet sans bloquer l'analyse altimétrique
+function gpfTileReport(nOk, nTot) {
+  if (nTot > 0 && nOk === 0) {
+    gpfNotify('Fond de carte IGN indisponible (aucune tuile reçue sur ' + nTot + '). L\'analyse altimétrique se poursuit sans fond.');
+  } else if (nTot > 0 && nOk < nTot) {
+    gpfNotify('Fond de carte IGN incomplet (' + nOk + ' tuiles reçues sur ' + nTot + ').');
+  }
+}
+
+// Lien vers le visualiseur cartes.gouv.fr (successeur du Géoportail)
+function gpfCartesURL(lat, lon, zoom) {
+  return GPF.viewer + '?c=' + lon.toFixed(6) + ',' + lat.toFixed(6) + '&z=' + zoom +
+         '&l=' + encodeURIComponent('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2$GEOPORTAIL:OGC:WMTS(1;1;0)') +
+         '&permalink=yes';
+}
+
 const R_EARTH = 6371000;
 const SEA_VALUE = -99999;
 const MIN_LAND_RATIO = 0.6;
@@ -1515,19 +1869,21 @@ function destPoint(lat, lon, brngDeg, distM) {
 
 async function fetchProfile(lat0, lon0, brngDeg, radius, sampling) {
   const [lat1, lon1] = destPoint(lat0, lon0, brngDeg, radius);
-  const url = API_ALTI + '?lon=' + lon0 + '|' + lon1 +
-              '&lat=' + lat0 + '|' + lat1 +
-              '&resource=' + RES +
-              '&delimiter=|&indent=false&measures=false&profile_mode=simple&sampling=' + sampling;
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const data = await r.json();
-  return data.elevations.map((p, i) => ({
-    d: i * (radius / (sampling - 1)),
-    z: p.z === SEA_VALUE ? 0 : p.z,
-    lat: p.lat, lon: p.lon,
-    isSea: p.z === SEA_VALUE
-  }));
+  // v3.1 — accès centralisé : file d'attente commune, délai maximal, nouvelles tentatives
+  const data = await gpfFetchJSON(gpfAltiLineURL(lon0, lat0, lon1, lat1, sampling),
+                                  { service: 'altimétrie IGN', throttle: true,
+                                    postBody: gpfAltiLineBody(lon0, lat0, lon1, lat1, sampling) });
+  const elevations = gpfElevations(data);
+  const n = elevations.length;
+  return elevations.map((p, i) => {
+    const noData = gpfIsNoData(p.z);   // -99999 = zone non couverte (mer) ; valeur absente traitée de même
+    return {
+      d: i * (radius / (n - 1)),
+      z: noData ? 0 : p.z,
+      lat: p.lat, lon: p.lon,
+      isSea: noData
+    };
+  });
 }
 
 function analyzeProfile(profile, radius) {
@@ -1808,26 +2164,17 @@ async function loadBasemap(lat, lon, radiusM, basemapKey) {
   const ctx = canvas.getContext('2d');
 
   const promises = [];
+  let nTilesOk = 0;
   for (let tx = minX; tx <= maxX; tx++) {
     for (let ty = minY; ty <= maxY; ty++) {
-      const url = WMTS + '?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0' +
-                  '&LAYER=' + bm.layer + '&STYLE=normal' +
-                  '&FORMAT=' + encodeURIComponent(bm.format) +
-                  '&TILEMATRIXSET=PM&TILEMATRIX=' + bestZoom +
-                  '&TILEROW=' + ty + '&TILECOL=' + tx;
-      promises.push(new Promise(resolve => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-          ctx.drawImage(img, (tx - minX) * tileSize, (ty - minY) * tileSize);
-          resolve();
-        };
-        img.onerror = () => resolve();
-        img.src = url;
+      // v3.1 — tuile via gpfLoadTile : délai maximal + repli de nom de pyramide
+      promises.push(gpfLoadTile(bm, bestZoom, ty, tx).then(img => {
+        if (img) { ctx.drawImage(img, (tx - minX) * tileSize, (ty - minY) * tileSize); nTilesOk++; }
       }));
     }
   }
   await Promise.all(promises);
+  gpfTileReport(nTilesOk, promises.length);
 
   const centerXpx = (tilePos.x - minX) * tileSize;
   const centerYpx = (tilePos.y - minY) * tileSize;
@@ -2672,9 +3019,9 @@ function showPointDetails(p, evt) {
   } else if (p.clampedCoastal) {
     clampNote = '<div class="pp-row pp-clamp"><span class="pp-key">⚠ Altitude clamp littoral</span><span class="pp-val">Originale : ' + p.zRaw.toFixed(1) + ' m → recalée à 0 m</span></div>';
   }
-  // Lien Géoportail
+  // Lien cartes.gouv.fr (v3.1 — le Géoportail a été remplacé par cartes.gouv.fr)
   const gpZoom = 17;
-  const geoportailUrl = 'https://www.geoportail.gouv.fr/carte?c=' + p.lon.toFixed(6) + ',' + p.lat.toFixed(6) + '&z=' + gpZoom + '&l0=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2::GEOPORTAIL:OGC:WMTS(1)';
+  const geoportailUrl = gpfCartesURL(p.lat, p.lon, gpZoom);
   const gMapsUrl = 'https://www.google.com/maps/@?api=1&map_action=map&center=' + p.lat.toFixed(6) + ',' + p.lon.toFixed(6) + '&zoom=18';
   const osmUrl = 'https://www.openstreetmap.org/?mlat=' + p.lat.toFixed(6) + '&mlon=' + p.lon.toFixed(6) + '#map=18/' + p.lat.toFixed(6) + '/' + p.lon.toFixed(6);
 
@@ -2693,7 +3040,7 @@ function showPointDetails(p, evt) {
     clampNote +
     '</div>' +
     '<div class="pp-links">' +
-    '  <a href="' + geoportailUrl + '" target="_blank" rel="noopener" class="pp-link">🗺 Géoportail</a>' +
+    '  <a href="' + geoportailUrl + '" target="_blank" rel="noopener" class="pp-link">🗺 cartes.gouv.fr</a>' +
     '  <a href="' + gMapsUrl + '" target="_blank" rel="noopener" class="pp-link">🛰 Google Maps</a>' +
     '  <a href="' + osmUrl + '" target="_blank" rel="noopener" class="pp-link">🌍 OpenStreetMap</a>' +
     '</div>';
@@ -3383,7 +3730,7 @@ document.addEventListener('keydown', e => {
     },
     {
       title: 'Étape 1 — Saisir le site',
-      body: '<b>Collez vos coordonnées GPS</b> dans le champ principal (récupérables sur Géoportail, Google Maps, etc.) ou cliquez sur un exemple préchargé pour démarrer rapidement.',
+      body: '<b>Collez vos coordonnées GPS</b> dans le champ principal (récupérables sur cartes.gouv.fr, Google Maps, etc.) ou cliquez sur un exemple préchargé pour démarrer rapidement.',
       icon: '📍'
     },
     {
@@ -3811,9 +4158,15 @@ document.getElementById('run').addEventListener('click', async () => {
   const directions = [];
   for (let a = 0; a < 360; a += step) directions.push(a);
 
+  gpfNotify('');
   status.textContent = 'Chargement du fond de carte IGN...';
   if (currentBasemap !== 'none') {
-    await loadBasemap(lat, lon, radius, currentBasemap);
+    // v3.1 — un fond de carte en échec ne doit jamais empêcher l'analyse altimétrique
+    try {
+      await loadBasemap(lat, lon, radius, currentBasemap);
+    } catch (e) {
+      gpfNotify('Fond de carte indisponible (' + e.message + '). L\'analyse altimétrique se poursuit sans fond.');
+    }
   }
 
   status.innerHTML = 'Récupération des altitudes IGN <span class="progress-info">0 / ' + directions.length + '</span><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>';
@@ -3827,9 +4180,10 @@ document.getElementById('run').addEventListener('click', async () => {
       allProfiles.push({ az, profile, analysis: null });
       const pct = Math.round(((i+1) / directions.length) * 100);
       status.innerHTML = 'Récupération des altitudes IGN <span class="progress-info">' + (i+1) + ' / ' + directions.length + ' (' + pct + ' %)</span><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
-      await new Promise(r => setTimeout(r, 220));
+      // v3.1 — la cadence est réglée par la file d'attente commune (gpfAltiSlot)
     } catch (e) {
-      status.textContent = 'Erreur direction ' + az + '° : ' + e.message;
+      status.textContent = '⚠ Analyse interrompue à la direction ' + az + '° : ' + e.message +
+                           ' Le bouton « Tester les accès IGN », en bas de page, indique quel service ne répond pas.';
       return;
     }
   }
@@ -4744,5 +5098,1004 @@ document.getElementById('exportProfileDOCX').addEventListener('click', async () 
 });
 </script>
 
-</body>
-</html>
+
+
+<script>
+/* =====================================================================
+   ALTI-VENT — MODULE VUE 3D (injection v3)
+   Maillage terrain N×N (5–20 pts/côté) centré sur le site, altimétrie
+   IGN point par point, fond de carte drapé, rosace suivant le terrain.
+   Aucune modification du code Alti-Vent existant : ce module se greffe
+   par enrobage de drawRose() et observation du fond de carte.
+   ===================================================================== */
+const API_ALTI_PTS = GPF.alti.points;   // v3.1 — adresse centralisée dans GPF
+let view3DActive = false;
+
+const T3D = (() => {
+  // ---- État ----
+  let renderer = null, scene = null, camera = null;
+  let terrainGroup = null;
+  let gridN = 10;                 // points par côté (5–20)
+  let gridZ = null;               // altitudes courantes (corrigées) [i][j], i=0 Nord, j=0 Ouest
+  let gridZraw = null;            // altitudes IGN d'origine
+  let gridSea = null;             // point hors couverture RGE ALTI (mer)
+  let half = 0;                   // demi-emprise du maillage (m) = rayon × 1,25 (= emprise du fond 2D)
+  let zRef = 0;                   // altitude de référence (centre du site)
+  let dataValid = false;
+  let builtFor = null;            // {lat, lon, radius, gridN} du dernier maillage construit
+  let texCanvas = null;           // texture courante
+  let texKey = '';                // clé de cache de la texture
+  let clickSpheres = [];
+
+  // ---- Contrôles orbitaux ----
+  const ctrl = {
+    target: new THREE.Vector3(),
+    theta: Math.PI,               // vue depuis le Sud → Nord au fond
+    phi: 0.95,
+    dist: 100,
+    def: null
+  };
+
+  function applyCamera() {
+    ctrl.phi = Math.max(0.05, Math.min(1.52, ctrl.phi));
+    ctrl.dist = Math.max(half * 0.15 || 10, Math.min(half * 8 || 1e6, ctrl.dist));
+    const sp = Math.sin(ctrl.phi), cp = Math.cos(ctrl.phi);
+    camera.position.set(
+      ctrl.target.x + ctrl.dist * sp * Math.sin(ctrl.theta),
+      ctrl.target.y + ctrl.dist * cp,
+      ctrl.target.z + ctrl.dist * sp * Math.cos(ctrl.theta)
+    );
+    camera.lookAt(ctrl.target);
+  }
+
+  function frame() {
+    if (!ctrl.def) return;
+    ctrl.target.copy(ctrl.def.target);
+    ctrl.theta = ctrl.def.theta;
+    ctrl.phi = ctrl.def.phi;
+    ctrl.dist = ctrl.def.dist;
+    applyCamera();
+  }
+
+  function initRenderer() {
+    if (renderer) return;
+    const canvas = document.getElementById('canvas3d');
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xdfe8ef);
+    camera = new THREE.PerspectiveCamera(50, 1, 1, 1e7);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.55);
+    sun.position.set(-0.4, 1, 0.6);
+    scene.add(sun);
+    bindControls(canvas);
+    resize();
+    const loop = () => { requestAnimationFrame(loop); renderer.render(scene, camera); };
+    loop();
+  }
+
+  function resize() {
+    if (!renderer) return;
+    const wrap = document.getElementById('wrap3d');
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    if (w === 0 || h === 0) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+
+  // ---- Souris / tactile : tourner, déplacer, zoomer, survoler, cliquer ----
+  function bindControls(canvas) {
+    let mode = null, px = 0, py = 0, moved = 0;
+    const pointers = new Map();
+    let pinchD = 0;
+
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+    canvas.addEventListener('pointerdown', e => {
+      canvas.setPointerCapture(e.pointerId);
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 2) {
+        const p = [...pointers.values()];
+        pinchD = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+        mode = 'pinch';
+      } else {
+        mode = (e.button === 2 || e.shiftKey) ? 'pan' : 'rotate';
+        px = e.clientX; py = e.clientY; moved = 0;
+      }
+      canvas.classList.add('dragging');
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if (!pointers.has(e.pointerId)) {
+        hover(e, canvas);           // simple survol : curseur main sur cible cliquable
+        return;
+      }
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (mode === 'pinch' && pointers.size === 2) {
+        const p = [...pointers.values()];
+        const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+        if (pinchD > 0) ctrl.dist *= pinchD / d;
+        pinchD = d;
+        applyCamera();
+        return;
+      }
+      if (!mode || mode === 'pinch') return;
+      const dx = e.clientX - px, dy = e.clientY - py;
+      px = e.clientX; py = e.clientY;
+      moved += Math.abs(dx) + Math.abs(dy);
+      if (mode === 'rotate') {
+        ctrl.theta -= dx * 0.006;
+        ctrl.phi -= dy * 0.006;
+      } else if (mode === 'pan') {
+        const k = ctrl.dist * 0.0016;
+        const right = new THREE.Vector3().subVectors(camera.position, ctrl.target).cross(camera.up).normalize();
+        const fwd = new THREE.Vector3().crossVectors(camera.up, right).normalize();
+        ctrl.target.addScaledVector(right, dx * k);
+        ctrl.target.addScaledVector(fwd, -dy * k);
+      }
+      applyCamera();
+    });
+
+    const release = e => {
+      if (mode !== 'pinch' && moved < 6) pick(e, canvas);
+      pointers.delete(e.pointerId);
+      if (pointers.size === 0) { mode = null; canvas.classList.remove('dragging'); }
+    };
+    canvas.addEventListener('pointerup', release);
+    canvas.addEventListener('pointercancel', e => { pointers.delete(e.pointerId); mode = null; canvas.classList.remove('dragging'); });
+
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      ctrl.dist *= (e.deltaY > 0 ? 1.12 : 0.89);
+      applyCamera();
+    }, { passive: false });
+  }
+
+  const raycaster = new THREE.Raycaster();
+  function rayHits(e, canvas) {
+    if (clickSpheres.length === 0 || !camera) return [];
+    const rect = canvas.getBoundingClientRect();
+    const m = new THREE.Vector2(
+      ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      -((e.clientY - rect.top) / rect.height) * 2 + 1
+    );
+    raycaster.setFromCamera(m, camera);
+    return raycaster.intersectObjects(clickSpheres);
+  }
+  function hover(e, canvas) {
+    canvas.style.cursor = rayHits(e, canvas).length > 0 ? 'pointer' : '';
+  }
+  function pick(e, canvas) {
+    const hits = rayHits(e, canvas);
+    if (hits.length > 0) {
+      const idx = hits[0].object.userData.idx;
+      if (idx !== undefined) showProfile(idx);   // même panneau profil / coupes que la 2D
+    }
+  }
+
+  // ---- Altimétrie du maillage ----
+  function nodeLatLon(i, j) {
+    const stepM = (2 * half) / (gridN - 1);
+    const dNorth = half - i * stepM;
+    const dEast = -half + j * stepM;
+    const lat = lastSiteCoords.lat + dNorth / 111320;
+    const lon = lastSiteCoords.lon + dEast / (111320 * Math.cos(lastSiteCoords.lat * Math.PI / 180));
+    return { lat, lon };
+  }
+
+  async function fetchGridElevations(statusEl) {
+    const pts = [];
+    for (let i = 0; i < gridN; i++)
+      for (let j = 0; j < gridN; j++) pts.push(nodeLatLon(i, j));
+
+    const CHUNK = 40;
+    const zs = [];
+    for (let k = 0; k < pts.length; k += CHUNK) {
+      const chunk = pts.slice(k, k + CHUNK);
+      // v3.1 — même file d'attente que l'analyse EC1 ; nombre d'altitudes contrôlé
+      const data = await gpfFetchJSON(gpfAltiPointsURL(chunk),
+                                      { service: 'altimétrie IGN', throttle: true, postBody: gpfAltiPointsBody(chunk) });
+      gpfElevations(data, chunk.length).forEach(p => zs.push(p.z));
+      statusEl.textContent = 'Altimétrie du maillage : ' + Math.min(k + CHUNK, pts.length) + ' / ' + pts.length + ' points...';
+    }
+
+    gridZraw = []; gridSea = [];
+    let n = 0;
+    for (let i = 0; i < gridN; i++) {
+      const row = [], seaRow = [];
+      for (let j = 0; j < gridN; j++, n++) {
+        const sea = zs[n] === SEA_VALUE || zs[n] === null || zs[n] === undefined;
+        seaRow.push(sea);
+        row.push(sea ? 0 : zs[n]);
+      }
+      gridZraw.push(row); gridSea.push(seaRow);
+    }
+    gridZ = gridZraw.map(r => r.slice());
+    const c = (gridN - 1) / 2;
+    zRef = gridZ[Math.round(c)][Math.round(c)];
+  }
+
+  // Interpolation bilinéaire de l'altitude en coordonnées locales (m) : x=Est, y=Nord
+  function terrainZ(xE, yN) {
+    const stepM = (2 * half) / (gridN - 1);
+    let fj = (xE + half) / stepM;
+    let fi = (half - yN) / stepM;
+    fi = Math.max(0, Math.min(gridN - 1.0001, fi));
+    fj = Math.max(0, Math.min(gridN - 1.0001, fj));
+    const i0 = Math.floor(fi), j0 = Math.floor(fj);
+    const ti = fi - i0, tj = fj - j0;
+    const z00 = gridZ[i0][j0], z01 = gridZ[i0][j0 + 1];
+    const z10 = gridZ[i0 + 1][j0], z11 = gridZ[i0 + 1][j0 + 1];
+    return (z00 * (1 - tj) + z01 * tj) * (1 - ti) + (z10 * (1 - tj) + z11 * tj) * ti;
+  }
+
+  // ---- Texture de drapage ----
+  // WMTS (ortho / plan) : re-fetch haute résolution 1024², sans toucher à loadBasemap.
+  // Autres fonds (heatmap / OSM) : réutilise l'image #basemap (carré 400 du haut).
+  async function ensureTexture() {
+    if (!lastSiteCoords) { texCanvas = null; return; }
+    const key = currentBasemap + '|' + lastSiteCoords.lat + '|' + lastSiteCoords.lon + '|' + lastSiteCoords.radius;
+    if (key === texKey && texCanvas) return;
+
+    const bm = (typeof BASEMAPS !== 'undefined') ? BASEMAPS[currentBasemap] : null;
+    if (bm && bm.layer) {
+      texCanvas = await fetchWMTSSquare(lastSiteCoords.lat, lastSiteCoords.lon, lastSiteCoords.radius, bm, 1024);
+      texKey = key;
+      return;
+    }
+    const img = document.getElementById('basemap');
+    if (img && img.src && img.complete && img.naturalWidth > 0 && currentBasemap !== 'none') {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      // l'image 2D fait 400×410 : on ne drape que le carré cartographique 400×400 du haut
+      c.getContext('2d').drawImage(img, 0, 0, 400, 400, 0, 0, 512, 512);
+      texCanvas = c;
+      texKey = key;
+      return;
+    }
+    texCanvas = null;
+    texKey = key;
+  }
+
+  async function fetchWMTSSquare(lat, lon, radiusM, bm, outSize) {
+    const latRad = lat * Math.PI / 180;
+    const metersPerPixelAtZoom = z => 156543.03392 * Math.cos(latRad) / Math.pow(2, z);
+    // même emprise que le fond 2D : demi-largeur = rayon × 1,25 ; on vise ≥ outSize px
+    const halfM = radiusM * (200 / 160);
+    let bestZoom = 17;
+    for (let z = 6; z <= 19; z++) {
+      if ((2 * halfM) / metersPerPixelAtZoom(z) >= outSize) { bestZoom = z; break; }
+    }
+    const tilePos = lonLatToTile(lon, lat, bestZoom);
+    const halfTiles = halfM / metersPerPixelAtZoom(bestZoom) / 256;
+    const minX = Math.floor(tilePos.x - halfTiles - 0.5);
+    const maxX = Math.floor(tilePos.x + halfTiles + 0.5);
+    const minY = Math.floor(tilePos.y - halfTiles - 0.5);
+    const maxY = Math.floor(tilePos.y + halfTiles + 0.5);
+    const tileSize = 256;
+    const mosaic = document.createElement('canvas');
+    mosaic.width = (maxX - minX + 1) * tileSize;
+    mosaic.height = (maxY - minY + 1) * tileSize;
+    const mctx = mosaic.getContext('2d');
+    const promises = [];
+    for (let tx = minX; tx <= maxX; tx++) {
+      for (let ty = minY; ty <= maxY; ty++) {
+        // v3.1 — tuile via gpfLoadTile (délai maximal + repli de nom de pyramide)
+        promises.push(gpfLoadTile(bm, bestZoom, ty, tx).then(img => {
+          if (img) mctx.drawImage(img, (tx - minX) * tileSize, (ty - minY) * tileSize);
+        }));
+      }
+    }
+    await Promise.all(promises);
+    const cxPx = (tilePos.x - minX) * tileSize;
+    const cyPx = (tilePos.y - minY) * tileSize;
+    const halfPx = halfM / metersPerPixelAtZoom(bestZoom);
+    const out = document.createElement('canvas');
+    out.width = outSize; out.height = outSize;
+    out.getContext('2d').drawImage(mosaic, cxPx - halfPx, cyPx - halfPx, 2 * halfPx, 2 * halfPx, 0, 0, outSize, outSize);
+    return out;
+  }
+
+  function hypsoColor(z, zMin, zMax) {
+    const t = zMax > zMin ? (z - zMin) / (zMax - zMin) : 0;
+    const stops = [[0.0,[46,120,70]],[0.35,[130,160,80]],[0.65,[165,130,80]],[0.85,[190,180,170]],[1.0,[245,245,245]]];
+    for (let s = 0; s < stops.length - 1; s++) {
+      if (t <= stops[s + 1][0]) {
+        const k = (t - stops[s][0]) / (stops[s + 1][0] - stops[s][0]);
+        const a = stops[s][1], b = stops[s + 1][1];
+        return new THREE.Color((a[0]+(b[0]-a[0])*k)/255, (a[1]+(b[1]-a[1])*k)/255, (a[2]+(b[2]-a[2])*k)/255);
+      }
+    }
+    return new THREE.Color(1, 1, 1);
+  }
+
+  function textSprite(txt, sizeM, color) {
+    const c = document.createElement('canvas');
+    c.width = 128; c.height = 128;
+    const g = c.getContext('2d');
+    g.beginPath(); g.arc(64, 64, 56, 0, Math.PI * 2);
+    g.fillStyle = 'rgba(255,255,255,0.88)'; g.fill();
+    g.font = 'bold 64px Calibri, Arial';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = color || '#1a1a1a';
+    g.fillText(txt, 64, 68);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false }));
+    sp.scale.set(sizeM, sizeM, 1);
+    sp.renderOrder = 10;
+    return sp;
+  }
+
+  function disposeGroup(g) {
+    g.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) {
+        (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => {
+          if (m.map) m.map.dispose();
+          m.dispose();
+        });
+      }
+    });
+  }
+
+  function rebuildScene() {
+    if (!gridZ || !renderer) return;
+    const exag = parseFloat(document.getElementById('p3dExag').value);
+    const hRose = parseFloat(document.getElementById('p3dH').value);
+    document.getElementById('p3dExagVal').textContent = '×' + exag;
+    document.getElementById('p3dHVal').textContent = hRose + ' m';
+
+    if (terrainGroup) { scene.remove(terrainGroup); disposeGroup(terrainGroup); }
+    terrainGroup = new THREE.Group();
+    clickSpheres = [];
+    const Y = z => (z - zRef) * exag;
+
+    // --- Maillage terrain ---
+    const seg = gridN - 1;
+    const geo = new THREE.PlaneGeometry(2 * half, 2 * half, seg, seg);
+    geo.rotateX(-Math.PI / 2);          // plan XZ : +X = Est, −Z = Nord
+    const pos = geo.attributes.position;
+    let zMin = Infinity, zMax = -Infinity;
+    gridZ.forEach(r => r.forEach(z => { zMin = Math.min(zMin, z); zMax = Math.max(zMax, z); }));
+    const useTex = !!texCanvas;
+    const colors = [];
+    let v = 0;
+    for (let i = 0; i < gridN; i++) {
+      for (let j = 0; j < gridN; j++, v++) {
+        pos.setY(v, Y(gridZ[i][j]));
+        if (!useTex) {
+          const col = gridSea[i][j] ? new THREE.Color(0x7FB2D9) : hypsoColor(gridZ[i][j], zMin, zMax);
+          colors.push(col.r, col.g, col.b);
+        }
+      }
+    }
+    if (!useTex) geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    geo.computeVertexNormals();
+
+    let mat;
+    if (useTex) {
+      const tex = new THREE.CanvasTexture(texCanvas);
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      mat = new THREE.MeshLambertMaterial({ map: tex, side: THREE.DoubleSide });
+    } else {
+      mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+    }
+    terrainGroup.add(new THREE.Mesh(geo, mat));
+
+    const wire = new THREE.LineSegments(
+      new THREE.WireframeGeometry(geo),
+      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.18 })
+    );
+    terrainGroup.add(wire);
+
+    // --- Rosace suivant le terrain (mêmes seuils % que la rosace 2D) ---
+    if (allProfiles) {
+      const radius = lastSiteCoords.radius;
+      allProfiles.forEach((pr, idx) => {
+        let color, tubeR, lenM;
+        if (pr.analysis.status !== 'ok') {
+          color = 0x888888; tubeR = radius / 160; lenM = radius * 0.15;
+        } else {
+          const slopePct = Math.abs(pr.analysis.slope.pct);
+          const slopeAbs = Math.abs(pr.analysis.slope.deg);
+          if (slopePct < 5)      { color = 0x1D9E75; tubeR = radius / 130; }
+          else if (slopePct < 9) { color = 0xEF9F27; tubeR = radius / 110; }
+          else                   { color = 0xE24B4A; tubeR = radius / 95; }
+          lenM = radius * Math.min(1, slopeAbs / 8 + 0.15);
+        }
+        const azR = pr.az * Math.PI / 180;
+        const dirE = Math.sin(azR), dirN = Math.cos(azR);
+        const K = 28;
+        const pts3 = [];
+        for (let k = 0; k <= K; k++) {
+          const d = lenM * k / K;
+          const xE = dirE * d, yN = dirN * d;
+          pts3.push(new THREE.Vector3(xE, Y(terrainZ(xE, yN)) + hRose * exag, -yN));
+        }
+        const curve = new THREE.CatmullRomCurve3(pts3);
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, K * 2, tubeR, 8, false),
+          new THREE.MeshLambertMaterial({ color, emissive: color, emissiveIntensity: 0.35 })
+        );
+        terrainGroup.add(tube);
+
+        // Extrémité cliquable → profil + coupes (cardinaux N/E/S/O grossis + anneau blanc)
+        const end = pts3[pts3.length - 1];
+        const isCardinal = pr.az % 90 === 0;
+        const sph = new THREE.Mesh(
+          new THREE.SphereGeometry(tubeR * (isCardinal ? 4.6 : 3.2), 16, 12),
+          new THREE.MeshLambertMaterial({ color, emissive: color, emissiveIntensity: 0.45 })
+        );
+        sph.position.copy(end);
+        terrainGroup.add(sph);
+        if (isCardinal) {
+          const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(tubeR * 6.2, tubeR * 0.8, 8, 24),
+            new THREE.MeshLambertMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.5 })
+          );
+          ring.position.copy(end);
+          ring.rotation.x = Math.PI / 2;
+          terrainGroup.add(ring);
+        }
+        const hit = new THREE.Mesh(
+          new THREE.SphereGeometry(tubeR * 10, 8, 6),
+          new THREE.MeshBasicMaterial({ visible: false })
+        );
+        hit.position.copy(end);
+        hit.userData.idx = idx;
+        terrainGroup.add(hit);
+        clickSpheres.push(hit);
+      });
+
+      // Mât central du site
+      const z0 = Y(terrainZ(0, 0));
+      const mastH = hRose * exag + radius / 25;
+      const mast = new THREE.Mesh(
+        new THREE.CylinderGeometry(radius / 250, radius / 250, mastH, 8),
+        new THREE.MeshLambertMaterial({ color: 0xE24B4A, emissive: 0xE24B4A, emissiveIntensity: 0.4 })
+      );
+      mast.position.set(0, z0 + mastH / 2, 0);
+      terrainGroup.add(mast);
+      const siteDot = new THREE.Mesh(
+        new THREE.SphereGeometry(radius / 90, 16, 12),
+        new THREE.MeshLambertMaterial({ color: 0xE24B4A, emissive: 0xE24B4A, emissiveIntensity: 0.5 })
+      );
+      siteDot.position.set(0, z0 + mastH, 0);
+      terrainGroup.add(siteDot);
+    }
+
+    // --- Cardinaux au bord du maillage ---
+    [['N', 0, 1], ['E', 1, 0], ['S', 0, -1], ['O', -1, 0]].forEach(([name, e, n]) => {
+      const xE = e * half * 0.96, yN = n * half * 0.96;
+      const sp = textSprite(name, half / 7, name === 'N' ? '#1F4E79' : '#1a1a1a');
+      sp.position.set(xE, Y(terrainZ(xE, yN)) + half / 9, -yN);
+      terrainGroup.add(sp);
+    });
+
+    scene.add(terrainGroup);
+
+    const relief = (zMax - zMin) * exag;
+    ctrl.def = {
+      target: new THREE.Vector3(0, Y((zMin + zMax) / 2), 0),
+      theta: Math.PI, phi: 0.95,
+      dist: Math.max(2 * half * 1.35, relief * 2.5)
+    };
+    if (!builtFor || builtFor.framed !== true) { frame(); if (builtFor) builtFor.framed = true; }
+  }
+
+  // ---- Table de correction des altitudes ----
+  function buildAltiTable() {
+    const wrap = document.getElementById('altiGridWrap');
+    let html = '<table><tr><th></th>';
+    for (let j = 0; j < gridN; j++) html += '<th>C' + (j + 1) + '</th>';
+    html += '</tr>';
+    for (let i = 0; i < gridN; i++) {
+      html += '<tr><th>L' + (i + 1) + '</th>';
+      for (let j = 0; j < gridN; j++) {
+        const edited = gridZ[i][j] !== gridZraw[i][j];
+        const sea = gridSea[i][j] ? ' title="Point en mer (RGE ALTI hors couverture)"' : '';
+        html += '<td><input type="number" step="0.1" value="' + gridZ[i][j].toFixed(1) +
+                '" data-i="' + i + '" data-j="' + j + '" class="' + (edited ? 'edited' : '') + '"' + sea + '></td>';
+      }
+      html += '</tr>';
+    }
+    html += '</table>';
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const i = +inp.dataset.i, j = +inp.dataset.j;
+        const val = parseFloat(inp.value);
+        if (isNaN(val)) { inp.value = gridZ[i][j].toFixed(1); return; }
+        gridZ[i][j] = val;
+        inp.classList.toggle('edited', val !== gridZraw[i][j]);
+        rebuildScene();
+      });
+    });
+  }
+
+  // Écrêtage du maillage 3D seul (idempotent) — retourne le nb de points corrigés
+  function clampGrid() {
+    if (!gridZ) return 0;
+    let n = 0;
+    for (let i = 0; i < gridN; i++)
+      for (let j = 0; j < gridN; j++)
+        if (gridZ[i][j] < 0) { gridZ[i][j] = 0; n++; }
+    if (n > 0) { buildAltiTable(); rebuildScene(); }
+    updateNegWarn();
+    return n;
+  }
+
+  function updateNegWarn() {
+    const warn = document.getElementById('altiNegWarn');
+    if (!warn) return;
+    let n = 0, zmin = 0;
+    if (gridZ) {
+      gridZ.forEach(r => r.forEach(z => { if (z < 0) { n++; if (z < zmin) zmin = z; } }));
+    }
+    if (n > 0) {
+      warn.innerHTML = '⚠ <b>' + n + '</b> altitude(s) négative(s) dans le maillage (min ' + zmin.toFixed(1) + ' m) — artefact MNT probable, ou vraie dépression (à vous de juger).';
+      warn.style.display = 'inline';
+    } else {
+      warn.style.display = 'none';
+    }
+  }
+
+  document.getElementById('altiReset3d').addEventListener('click', () => {
+    if (!gridZraw) return;
+    gridZ = gridZraw.map(r => r.slice());
+    buildAltiTable();
+    rebuildScene();
+    updateNegWarn();
+  });
+
+  // 🌊 : corrige LES DEUX — maillage 3D ET profils EC1 (rosace, coupes, ΔAc)
+  document.getElementById('altiClamp0').addEventListener('click', () => {
+    const msg = [];
+    const n = clampGrid();           // d'abord le maillage (pour un comptage juste)
+    msg.push(n + ' point(s) du maillage écrêté(s)');
+    const btn2d = document.getElementById('clampAllBtn');
+    if (btn2d && !btn2d.disabled && allProfiles) {
+      btn2d.click();                 // réutilise la correction 2D existante (profils + ré-analyse + ΔAc + rosace)
+      msg.push('profils EC1 corrigés');
+    }
+    const st = document.getElementById('status3d');
+    st.style.display = 'block';
+    st.textContent = msg.join(' · ') + ' → tout < 0 m ramené à 0 m NGF.';
+    setTimeout(() => { st.style.display = 'none'; }, 2600);
+  });
+
+  // ---- Construction complète (altimétrie + texture + scène) ----
+  async function build() {
+    if (!lastSiteCoords || !allProfiles) {
+      const st = document.getElementById('status3d');
+      st.style.display = 'block';
+      st.textContent = 'Lancez d\'abord "Analyser le site" pour générer la vue 3D.';
+      return;
+    }
+    initRenderer();
+    resize();
+    const st = document.getElementById('status3d');
+    st.style.display = 'block';
+    gridN = parseInt(document.getElementById('p3dGrid').value);
+    half = lastSiteCoords.radius * (200 / 160);
+    try {
+      st.textContent = 'Altimétrie du maillage : 0 / ' + (gridN * gridN) + ' points...';
+      await fetchGridElevations(st);
+      st.textContent = 'Préparation du fond de carte...';
+      await ensureTexture();
+      dataValid = true;
+      builtFor = { lat: lastSiteCoords.lat, lon: lastSiteCoords.lon, radius: lastSiteCoords.radius, gridN, framed: false };
+      buildAltiTable();
+      rebuildScene();
+      updateNegWarn();     // alerte si altitudes négatives dans le maillage
+      st.style.display = 'none';
+      document.getElementById('altiEdit').style.display = 'block';
+    } catch (e) {
+      st.textContent = 'Erreur API altimétrie : ' + e.message;
+    }
+  }
+
+  function sameSite() {
+    return builtFor && lastSiteCoords &&
+      builtFor.lat === lastSiteCoords.lat &&
+      builtFor.lon === lastSiteCoords.lon &&
+      builtFor.radius === lastSiteCoords.radius &&
+      builtFor.gridN === parseInt(document.getElementById('p3dGrid').value);
+  }
+
+  return {
+    build,
+    hasData: () => dataValid,
+    sameSite,
+    clampGrid,
+    invalidate: () => { dataValid = false; builtFor = null; },
+    refreshTexture: async () => { await ensureTexture(); rebuildScene(); },
+    rebuildScene,
+    frame,
+    resize
+  };
+})();
+
+// ---- Basculement Vue 2D / Vue 3D ----
+async function setView3D(on) {
+  view3DActive = on;
+  document.getElementById('btnView2d').classList.toggle('active', !on);
+  document.getElementById('btnView3d').classList.toggle('active', on);
+  document.getElementById('wrap2d').style.display = on ? 'none' : 'block';
+  document.getElementById('wrap3d').style.display = on ? 'block' : 'none';
+  document.getElementById('params3d').style.display = on ? 'flex' : 'none';
+  document.getElementById('altiEdit').style.display = (on && T3D.hasData()) ? 'block' : 'none';
+  if (on) {
+    T3D.resize();
+    if (!T3D.hasData() || !T3D.sameSite()) await T3D.build();
+    else T3D.rebuildScene();
+  }
+}
+document.getElementById('btnView2d').addEventListener('click', () => setView3D(false));
+document.getElementById('btnView3d').addEventListener('click', () => setView3D(true));
+document.getElementById('btnFrame').addEventListener('click', () => T3D.frame());
+document.getElementById('p3dRebuild').addEventListener('click', () => T3D.build());
+document.getElementById('p3dExag').addEventListener('input', () => { if (T3D.hasData()) T3D.rebuildScene(); });
+document.getElementById('p3dH').addEventListener('input', () => { if (T3D.hasData()) T3D.rebuildScene(); });
+
+// ---- Greffes non-invasives sur le code Alti-Vent existant ----
+// 1) drawRose est appelée à la fin de chaque analyse ET après l'écrêtage 2D :
+//    on en profite pour synchroniser la 3D sans toucher au code d'origine.
+const _altivent_drawRose = drawRose;
+drawRose = function(profiles, radius) {
+  _altivent_drawRose(profiles, radius);
+  if (T3D.sameSite() && T3D.hasData()) {
+    if (view3DActive) T3D.rebuildScene();     // profils modifiés (ex. écrêtage 2D) → rosace 3D à jour
+  } else {
+    T3D.invalidate();                          // nouveau site / rayon → maillage à refaire
+    if (view3DActive) T3D.build();
+  }
+  Repos.onAnalysisDone();                      // carte générée → repositionnement possible
+  Geo.reverseFill();                           // GPS → adresse (l'un remplit l'autre)
+};
+
+// 2) Changement de fond de carte : #basemap change de src → texture 3D rafraîchie.
+new MutationObserver(() => {
+  if (view3DActive && T3D.hasData()) T3D.refreshTexture();
+}).observe(document.getElementById('basemap'), { attributes: true, attributeFilter: ['src'] });
+
+// 3) Le bouton 2D « Corriger les altitudes < 0 m » écrête AUSSI le maillage 3D
+//    (nos deux boutons font donc la même chose : profils EC1 + terrain 3D).
+document.getElementById('clampAllBtn').addEventListener('click', () => {
+  T3D.clampGrid();     // no-op si le maillage n'existe pas encore
+});
+
+/* =====================================================================
+   MODULE GÉOCODAGE + REPOSITIONNEMENT (injection v3.1)
+   - Recherche par adresse (API Géoplateforme /geocodage) : l'adresse
+     remplit les coordonnées GPS, et inversement (géocodage inverse).
+   - Épingle de repositionnement sur la carte 2D : clic pour replacer le
+     point de référence, validation → recalcul complet de l'orographie.
+   ===================================================================== */
+const API_GEOCODE = GPF.geocode.url;   // v3.1 — adresse centralisée dans GPF
+
+const Geo = (() => {
+  const addrInput = document.getElementById('addr');
+  const list = document.getElementById('addrList');
+  let debounceT = null;
+  let programmatic = false;   // anti-boucle adresse ↔ GPS
+  let lastReverseKey = '';
+
+  // Adresse → GPS : on pilote le champ #paste existant comme un collage
+  // utilisateur, pour réutiliser tel quel le parseur/validateur d'Alti-Vent.
+  function applyCoords(lat, lon, label) {
+    programmatic = true;
+    if (label) addrInput.value = label;
+    const paste = document.getElementById('paste');
+    paste.value = lat.toFixed(6) + ', ' + lon.toFixed(6);
+    paste.dispatchEvent(new Event('input', { bubbles: true }));
+    document.getElementById('lat').value = lat.toFixed(6);
+    document.getElementById('lon').value = lon.toFixed(6);
+    document.getElementById('lat').dispatchEvent(new Event('input', { bubbles: true }));
+    document.getElementById('lon').dispatchEvent(new Event('input', { bubbles: true }));
+    programmatic = false;
+  }
+
+  function hideList() { list.style.display = 'none'; list.innerHTML = ''; }
+
+  async function search(q) {
+    try {
+      const data = await gpfFetchJSON(API_GEOCODE + '/search?q=' + encodeURIComponent(q) + '&limit=5&index=address',
+                                      { service: 'géocodage IGN', retries: 1, timeoutMs: GPF.geocode.timeoutMs });
+      const feats = (data.features || []).filter(f => f.geometry && f.geometry.coordinates);
+      if (feats.length === 0) {
+        list.innerHTML = '<div class="addr-item addr-empty">Aucun résultat — précisez la rue ou la ville</div>';
+        list.style.display = 'block';
+        return;
+      }
+      list.innerHTML = '';
+      feats.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'addr-item';
+        const p = f.properties || {};
+        div.textContent = p.label || (p.name + ', ' + (p.city || ''));
+        div.addEventListener('click', () => {
+          const [lon, lat] = f.geometry.coordinates;
+          applyCoords(lat, lon, div.textContent);
+          hideList();
+          document.getElementById('status').textContent =
+            'Site placé par adresse : ' + div.textContent + ' — cliquez "Analyser le site".';
+        });
+        list.appendChild(div);
+      });
+      list.style.display = 'block';
+    } catch (e) { /* réseau : silencieux, le champ GPS reste utilisable */ }
+  }
+
+  addrInput.addEventListener('input', () => {
+    if (programmatic) return;
+    clearTimeout(debounceT);
+    const q = addrInput.value.trim();
+    if (q.length < 3) { hideList(); return; }
+    debounceT = setTimeout(() => search(q), 350);
+  });
+  addrInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const first = list.querySelector('.addr-item:not(.addr-empty)');
+      if (first) first.click();
+      else if (addrInput.value.trim().length >= 3) search(addrInput.value.trim());
+    }
+    if (e.key === 'Escape') hideList();
+  });
+  document.addEventListener('click', e => {
+    if (!list.contains(e.target) && e.target !== addrInput) hideList();
+  });
+
+  // GPS → adresse (géocodage inverse), déclenché à la saisie manuelle et après analyse
+  async function reverseFill(latV, lonV) {
+    const lat = latV !== undefined ? latV : parseFloat(document.getElementById('lat').value);
+    const lon = lonV !== undefined ? lonV : parseFloat(document.getElementById('lon').value);
+    if (isNaN(lat) || isNaN(lon)) return;
+    const key = lat.toFixed(5) + ',' + lon.toFixed(5);
+    if (key === lastReverseKey) return;    // évite les requêtes répétées au même point
+    lastReverseKey = key;
+    try {
+      const data = await gpfFetchJSON(API_GEOCODE + '/reverse?lon=' + gpfCoord(lon) + '&lat=' + gpfCoord(lat) + '&limit=1&index=address',
+                                      { service: 'géocodage IGN', retries: 1, timeoutMs: GPF.geocode.timeoutMs });
+      const f = (data.features || [])[0];
+      programmatic = true;
+      addrInput.value = f && f.properties ? f.properties.label : '';
+      addrInput.placeholder = f ? addrInput.placeholder : 'Adresse introuvable à ce point (pleine mer, forêt…)';
+      programmatic = false;
+    } catch (e) { /* silencieux */ }
+  }
+
+  // Saisie manuelle GPS → adresse mise à jour (debounce)
+  let revT = null;
+  ['lat', 'lon', 'paste'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      if (programmatic) return;
+      clearTimeout(revT);
+      revT = setTimeout(() => reverseFill(), 700);
+    });
+  });
+
+  return { reverseFill, applyCoords };
+})();
+
+const Repos = (() => {
+  const btnGo = document.getElementById('btnRepos');
+  const btnOk = document.getElementById('btnReposOk');
+  const wrap = document.getElementById('wrap2d');
+  let active = false;
+  let pin = null;
+  let pinPx = null;   // {px, py} dans le repère 400×410 de la carte
+
+  function onAnalysisDone() {
+    btnGo.disabled = false;
+    cancel();   // nouvelle carte → l'épingle précédente n'a plus de sens
+  }
+
+  function enterMode() {
+    if (view3DActive) setView3D(false);   // l'épingle se pose sur la carte 2D
+    active = true;
+    btnGo.classList.add('repos-active');
+    btnGo.textContent = '✕ Annuler le repositionnement';
+    wrap.classList.add('repos-mode');
+    document.getElementById('status').textContent =
+      '📍 Cliquez sur la carte pour replacer le point de référence, puis validez.';
+  }
+
+  function cancel() {
+    active = false;
+    pinPx = null;
+    btnGo.classList.remove('repos-active');
+    btnGo.textContent = '📍 Repositionner le site';
+    btnOk.disabled = true;
+    wrap.classList.remove('repos-mode');
+    if (pin) { pin.remove(); pin = null; }
+  }
+
+  btnGo.addEventListener('click', () => { active ? cancel() : enterMode(); });
+
+  wrap.addEventListener('click', e => {
+    if (!active) return;
+    e.stopPropagation();
+    const rect = wrap.getBoundingClientRect();
+    let px = (e.clientX - rect.left) / rect.width * 400;
+    let py = (e.clientY - rect.top) / rect.height * 410;
+    // seule la zone cartographique carrée (400×400 du haut) est valide
+    px = Math.max(0, Math.min(400, px));
+    py = Math.max(0, Math.min(400, py));
+    pinPx = { px, py };
+    if (!pin) {
+      pin = document.createElement('div');
+      pin.className = 'repos-pin';
+      pin.textContent = '📍';
+      wrap.appendChild(pin);
+    }
+    pin.style.left = (px / 400 * 100) + '%';
+    pin.style.top = (py / 410 * 100) + '%';
+    btnOk.disabled = false;
+    document.getElementById('status').textContent =
+      '📍 Épingle posée — recliquez pour ajuster, ou validez le repositionnement.';
+  }, true);   // capture : passe avant les clics de la rosace SVG
+
+  btnOk.addEventListener('click', () => {
+    if (!pinPx || !lastSiteCoords) return;
+    // 400 px ↔ 2 × (rayon × 1,25) m : même emprise que le fond de carte et le maillage 3D
+    const halfM = lastSiteCoords.radius * (200 / 160);
+    const dE = (pinPx.px - 200) * halfM / 200;
+    const dN = (200 - pinPx.py) * halfM / 200;
+    const newLat = lastSiteCoords.lat + dN / 111320;
+    const newLon = lastSiteCoords.lon + dE / (111320 * Math.cos(lastSiteCoords.lat * Math.PI / 180));
+    cancel();
+    btnGo.disabled = true;                    // regrisé le temps du recalcul
+    Geo.applyCoords(newLat, newLon);          // remplit paste + lat/lon (parseur existant)
+    Geo.reverseFill(newLat, newLon);          // met l'adresse à jour
+    document.getElementById('run').click();   // recalcul complet de l'orographie
+  });
+
+  return { onAnalysisDone };
+})();
+
+</script>
+
+<script>
+/* =====================================================================
+   MODULE DIAGNOSTIC DES ACCÈS IGN (injection v3.1 — accès Géoplateforme)
+   Bouton « Tester les accès IGN » en pied de page : interroge, depuis le
+   poste de l'utilisateur, chacun des services utilisés par Alti-Vent et
+   affiche le résultat ligne par ligne. Aucun calcul EC1 n'est modifié.
+   ===================================================================== */
+const GpfDiag = (() => {
+  const footer = document.querySelector('footer');
+  if (!footer) return {};
+
+  const bar = document.createElement('div');
+  bar.id = 'gpfDiagBar';
+  bar.style.cssText = 'margin-top:10px;';
+  bar.innerHTML =
+    '<span>Alti-Vent v' + ALTI_VENT_VERSION + ' · Données servies par la Géoplateforme IGN (data.geopf.fr)</span> ' +
+    '<button type="button" id="gpfDiagBtn" style="font-size:11px;padding:3px 10px;margin-left:8px;" ' +
+    'aria-label="Tester les accès aux services IGN depuis votre poste">Tester les accès IGN</button>' +
+    '<div id="gpfDiagOut" role="status" aria-live="polite" style="display:none;max-width:640px;margin:10px auto 0;' +
+    'text-align:left;font-size:12px;color:var(--text);background:var(--card);border:0.5px solid var(--border);' +
+    'border-radius:6px;padding:10px 14px;"></div>';
+  const lic = footer.querySelector('.footer-license');
+  if (lic) footer.insertBefore(bar, lic); else footer.appendChild(bar);
+
+  const btn = document.getElementById('gpfDiagBtn');
+  const out = document.getElementById('gpfDiagOut');
+
+  function site() {
+    const lat = parseFloat(document.getElementById('lat').value);
+    const lon = parseFloat(document.getElementById('lon').value);
+    if (isNaN(lat) || isNaN(lon)) return { lat: 48.5510, lon: -2.7350, defaut: true };
+    return { lat, lon, defaut: false };
+  }
+
+  function methode() { return GPF.alti.method === 'POST' ? ' (méthode POST, la méthode GET étant refusée par le service)' : ''; }
+  function zTxt(z) { return gpfIsNoData(z) ? 'hors couverture ou mer' : z.toFixed(1).replace('.', ',') + ' m'; }
+
+  async function testTile(bm, s) {
+    const t = lonLatToTile(s.lon, s.lat, 15);
+    const row = Math.floor(t.y), col = Math.floor(t.x);
+    for (const tms of [GPF.wmts.tms, GPF.wmts.tmsAlt]) {
+      const r = await gpfLoadImage(gpfTileURL(bm, 15, row, col, tms), GPF.wmts.timeoutMs);
+      if (r.img) return 'tuile reçue (pyramide ' + tms + ')';
+      if (r.timedOut) throw new Error('pas de réponse du service de tuiles après ' + Math.round(GPF.wmts.timeoutMs / 1000) + ' s');
+    }
+    throw new Error('tuile refusée par le service (pyramides ' + GPF.wmts.tms + ' et ' + GPF.wmts.tmsAlt + ' essayées)');
+  }
+
+  function tests(s) {
+    const optAlti = { service: 'altimétrie IGN', throttle: true, retries: 0, timeoutMs: 15000 };
+    const optGeo = { service: 'géocodage IGN', retries: 0, timeoutMs: GPF.geocode.timeoutMs };
+    return [
+      { label: 'Altimétrie — profil en long', run: async () => {
+          const [lat1, lon1] = destPoint(s.lat, s.lon, 0, 200);
+          const opt = Object.assign({ postBody: gpfAltiLineBody(s.lon, s.lat, lon1, lat1, 3) }, optAlti);
+          const el = gpfElevations(await gpfFetchJSON(gpfAltiLineURL(s.lon, s.lat, lon1, lat1, 3), opt), 3);
+          return '3 altitudes reçues — au site : ' + zTxt(el[0].z) + methode();
+        } },
+      { label: 'Altimétrie — points du maillage 3D', run: async () => {
+          const [lat1, lon1] = destPoint(s.lat, s.lon, 90, 200);
+          const pts = [{ lat: s.lat, lon: s.lon }, { lat: lat1, lon: lon1 }];
+          const opt = Object.assign({ postBody: gpfAltiPointsBody(pts) }, optAlti);
+          const el = gpfElevations(await gpfFetchJSON(gpfAltiPointsURL(pts), opt), 2);
+          return '2 altitudes reçues — au site : ' + zTxt(el[0].z) + methode();
+        } },
+      { label: 'Fond de carte — photographies aériennes', run: () => testTile(BASEMAPS.ortho, s) },
+      { label: 'Fond de carte — Plan IGN', run: () => testTile(BASEMAPS.plan, s) },
+      { label: 'Géocodage — recherche par adresse', run: async () => {
+          const d = await gpfFetchJSON(GPF.geocode.url + '/search?q=' + encodeURIComponent('Plérin') + '&limit=1&index=address', optGeo);
+          const n = (d.features || []).length;
+          if (n === 0) throw new Error('réponse reçue mais aucun résultat');
+          return 'réponse reçue (' + ((d.features[0].properties || {}).label || '1 résultat') + ')';
+        } },
+      { label: 'Géocodage inverse — coordonnées vers adresse', run: async () => {
+          const d = await gpfFetchJSON(GPF.geocode.url + '/reverse?lon=' + gpfCoord(s.lon) + '&lat=' + gpfCoord(s.lat) + '&limit=1&index=address', optGeo);
+          const f = (d.features || [])[0];
+          return f && f.properties ? 'réponse reçue (' + f.properties.label + ')' : 'réponse reçue (aucune adresse à ce point)';
+        } }
+    ];
+  }
+
+  function line(ok, label, detail, ms) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;align-items:baseline;padding:3px 0;border-bottom:0.5px solid var(--border);';
+    const mark = document.createElement('b');
+    mark.textContent = ok ? '✓' : '✗';
+    mark.style.color = ok ? 'var(--color-success)' : 'var(--color-danger)';
+    const txt = document.createElement('span');
+    txt.style.flex = '1';
+    const l = document.createElement('b');
+    l.textContent = label;
+    txt.appendChild(l);
+    txt.appendChild(document.createTextNode(' — ' + detail));
+    const t = document.createElement('span');
+    t.style.cssText = 'color:var(--text3);white-space:nowrap;';
+    t.textContent = Math.round(ms) + ' ms';
+    row.appendChild(mark); row.appendChild(txt); row.appendChild(t);
+    return row;
+  }
+
+  async function run() {
+    btn.disabled = true;
+    const s = site();
+    out.style.display = 'block';
+    out.innerHTML = '';
+    const head = document.createElement('div');
+    head.style.cssText = 'margin-bottom:6px;color:var(--text2);';
+    head.textContent = 'Test des accès IGN depuis votre poste — point testé : ' + s.lat.toFixed(4) + ', ' + s.lon.toFixed(4) +
+                       (s.defaut ? ' (site d\'exemple, aucune coordonnée saisie)' : '') + '.';
+    out.appendChild(head);
+
+    let nKo = 0;
+    const list = tests(s);
+    for (let i = 0; i < list.length; i++) {
+      const t0 = performance.now();
+      let ok = true, detail = '';
+      try { detail = await list[i].run(); }
+      catch (e) { ok = false; nKo++; detail = (e && e.message) ? e.message : 'échec'; }
+      out.appendChild(line(ok, list[i].label, detail, performance.now() - t0));
+    }
+    gpfNotify('');
+
+    const concl = document.createElement('div');
+    concl.style.cssText = 'margin-top:8px;';
+    if (nKo === 0) {
+      concl.innerHTML = '<b style="color:var(--color-success);">Tous les accès IGN répondent depuis votre poste.</b>';
+    } else {
+      concl.innerHTML = '<b style="color:var(--color-danger);">' + nKo + ' accès sur ' + list.length + ' ne répond' + (nKo > 1 ? 'ent' : '') + ' pas.</b> ' +
+        'Relevez la ligne en échec et son message. Causes les plus fréquentes : limite de débit IGN (attendez 5 secondes puis relancez le test), ' +
+        'pare-feu ou proxy d\'entreprise, extension de navigateur bloquant data.geopf.fr.';
+    }
+    out.appendChild(concl);
+    btn.disabled = false;
+  }
+
+  btn.addEventListener('click', run);
+  return { run };
+})();
+</script>
+</body></html>

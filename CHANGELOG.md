@@ -1,5 +1,42 @@
 # Changelog Alti-Vent
 
+## v3.1.0 — Novembre 2026 — Accès Géoplateforme fiabilisés + vue 3D
+
+Le site Géoportail a été remplacé par cartes.gouv.fr. Les services de
+données IGN (data.geopf.fr) restent en place mais appliquent une limite
+stricte de 5 requêtes par seconde : au-delà, réponse HTTP 429 et blocage
+de 5 secondes, ce qui interrompait l'analyse.
+
+### Accès IGN (correctif)
+- Tous les accès IGN regroupés dans un bloc unique (`GPF`) en tête de script
+- File d'attente commune à l'altimétrie (profils EC1 et maillage 3D),
+  cadence limitée à environ 3 requêtes par seconde
+- Nouvelles tentatives automatiques sur limite de débit (429), panne
+  serveur ou coupure réseau, avec délai maximal par requête
+- Contrôle du format des réponses altimétriques avant tout calcul
+- Repli automatique en méthode POST si le service refuse GET (HTTP 405)
+- Tuiles WMTS : délai maximal de 8 s, repli sur le nom de pyramide
+  `PM_0_19` ; un fond de carte en échec ne bloque plus l'analyse
+- Messages d'erreur explicites dans la zone d'état
+- Nouveau bouton **« Tester les accès IGN »** en pied de page : teste
+  chaque service depuis le poste de l'utilisateur
+
+### Liens
+- Lien « Géoportail » de la fenêtre *Point du profil* remplacé par un
+  lien **cartes.gouv.fr**
+
+### Nouveautés de la v3 (première publication sur ce dépôt)
+- **Vue 3D** du terrain (Three.js r128) : maillage paramétrable, fond de
+  carte drapé, rosace suivant le relief, coupes de profil
+- **Recherche par adresse** et géocodage inverse (API Géoplateforme)
+- **Épingle de repositionnement** du site sur la carte, avec recalcul
+  complet de l'orographie
+
+### Inchangé
+- Calculs EC1 (pentes, cas 2/3/4, H, Lu, X, ΔAc) : résultats identiques
+  à la v3 sur les mêmes données altimétriques
+
+
 ## v2.3.0 — Mai 2026 — Polissage final + bascule licence CC BY-NC-ND 4.0
 
 ### Licence

@@ -18,6 +18,8 @@ Pour calculer la pression dynamique de pointe du vent au sens de l'Eurocode 1, i
 - Calcul des paramètres géométriques **H, Lu, X** ou de l'altitude relative **ΔAc**
 - Croisement avec les données **OpenStreetMap** (via Overpass API) pour estimer les catégories de terrain (0, II, IIIa, IIIb, IV) selon EC1
 - Export d'une **page d'analyse** prête à insérer dans une note de calcul (SVG ou DOCX)
+- **Vue 3D** du terrain avec fond de carte drapé et rosace suivant le relief
+- **Recherche par adresse** et repositionnement du site d'un clic sur la carte
 
 L'outil tourne **intégralement dans le navigateur** : pas de serveur, pas d'inscription, pas d'envoi de données. Il suffit d'un navigateur récent et d'une connexion internet (pour les appels API IGN et OSM).
 
@@ -32,7 +34,7 @@ L'outil tourne **intégralement dans le navigateur** : pas de serveur, pas d'ins
 
 ### Saisie du site
 - Champs latitude / longitude séparés
-- Champ **« coller GPS »** acceptant tous les formats Géoportail, Google Maps, etc. (`48.5510, -2.7350`, `N48.5510 W2.7350`, `48,5510 ; -2,7350`...)
+- Champ **« coller GPS »** acceptant tous les formats cartes.gouv.fr, Google Maps, etc. (`48.5510, -2.7350`, `N48.5510 W2.7350`, `48,5510 ; -2,7350`...)
 - Choix du rayon (500 m à 1 km), pas angulaire (15° à 45°), exemples préchargés
 
 ### Panneau Profil altimétrique
@@ -71,7 +73,7 @@ L'outil est publié via GitHub Pages :
 2. Ouvrez-le dans un navigateur récent (Chrome, Firefox, Edge, Safari)
 3. Une connexion internet est nécessaire pour les requêtes vers l'API IGN et OSM
 
-L'outil est entièrement contenu dans un seul fichier HTML : aucune installation, aucune dépendance à installer manuellement (Chart.js et JSZip sont chargés via CDN à la volée).
+L'outil est entièrement contenu dans un seul fichier HTML : aucune installation, aucune dépendance à installer manuellement (Chart.js, JSZip et Three.js sont chargés via CDN à la volée).
 
 ---
 
@@ -95,8 +97,11 @@ L'outil est entièrement contenu dans un seul fichier HTML : aucune installation
 
 ```
 alti-vent/
-├── index.html              ← l'outil complet (autonome, ~200 KB)
+├── index.html              ← l'outil complet, version en cours (autonome, ~400 KB)
+├── alti-vent-v3.1.0.html   ← archive de la version 3.1.0
+├── alti-vent-v2.3.0.html   ← archive de la version 2.3.0
 ├── alti-vent-v1.0.0.html   ← archive de la version 1.0.0
+├── CHANGELOG.md            ← historique des versions
 ├── LICENSE                 ← licence CC BY-NC-ND 4.0
 └── README.md               ← ce fichier
 ```
@@ -107,6 +112,9 @@ alti-vent/
 
 - **IGN Géoplateforme — RGE ALTI®** : MNT haute résolution (1 m) sur la France métropolitaine, DROM et collectivités d'outre-mer
 - **IGN Géoplateforme — WMTS** : photos aériennes (BD ORTHO) et fond Plan IGN
+- **IGN Géoplateforme — Géocodage** : recherche par adresse et géocodage inverse
+
+Les services IGN limitent le débit (5 requêtes par seconde pour l'altimétrie). En cas de doute sur un accès, le bouton **« Tester les accès IGN »**, en pied de page de l'outil, indique quel service ne répond pas.
 - **OpenStreetMap** (tuiles + Overpass API) : occupation du sol pour les catégories de terrain
 - **Norme NF EN 1991-1-4** : schémas illustrant les cas 02, 03, 04 (modal d'aide)
 
