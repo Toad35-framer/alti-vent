@@ -1,5 +1,38 @@
 # Changelog Alti-Vent
 
+## v3.2.0 — Novembre 2026 — Correction automatique des altitudes littorales
+
+En bord de mer, le MNT IGN ne renvoie pas toujours la valeur « mer »
+habituelle (−99999). Certaines zones non couvertes reviennent avec
+−9999, −1000 ou d'autres valeurs aberrantes, que l'outil prenait pour
+du vrai terrain : pentes faussées dans la rosace, puits dans la vue 3D.
+
+### Correctif — même règle pour la rosace et la vue 3D
+- **Zones non couvertes** : toute altitude inférieure à −100 m est
+  reconnue comme hors couverture et traitée comme mer à 0 m (le point
+  le plus bas de France métropolitaine est vers −10 m)
+- **Bord de mer** : une altitude négative est recalée à 0 m si elle est
+  à moins d'environ 150 m de la mer, ou si elle appartient à une bande
+  négative continue qui rejoint la mer (estran, vasière)
+- **Vraies dépressions conservées** : une zone négative séparée de la
+  mer par du terrain ≥ 0 m (Camargue, polder fermé) n'est pas modifiée ;
+  un message la signale et laisse l'utilisateur juger
+
+### Transparence des corrections
+- Fin d'analyse : nombre de points recalés et de points hors couverture
+  à valeur atypique
+- Fenêtre « Point du profil » : valeur reçue de l'IGN affichée
+  (ex. « Hors couverture IGN (valeur reçue : −9999 m) »)
+- Tableau d'altitudes 3D : cases recalées en **bleu**, valeur IGN
+  d'origine au survol ; « Réinitialiser aux valeurs IGN » annule la
+  correction, « Recalculer le maillage » la réapplique
+- Les boutons de correction manuelle (rosace et 🌊) restent disponibles
+
+### Inchangé
+- Calculs EC1 (pentes, cas 2/3/4, H, Lu, X, ΔAc) hors zones littorales
+- Accès Géoplateforme et diagnostic « Tester les accès IGN » (v3.1)
+
+
 ## v3.1.0 — Novembre 2026 — Accès Géoplateforme fiabilisés + vue 3D
 
 Le site Géoportail a été remplacé par cartes.gouv.fr. Les services de

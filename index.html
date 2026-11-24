@@ -816,6 +816,7 @@
   #altiGridWrap td { padding: 1px; border: 0.5px solid #eee; }
   #altiGridWrap input { width: 52px; padding: 2px 3px; font-size: 10px; border-radius: 3px; text-align: right; }
   #altiGridWrap input.edited { background: #FFF3D6; border-color: var(--amber); }
+  #altiGridWrap input.auto { background: #E2F1F4; border-color: var(--teal, #1D8A99); }
   /* ===== Recherche par adresse (injection v3.1) ===== */
   .addr-wrap { position: relative; margin-bottom: 12px; }
   .addr-list { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; background: white; border: 0.5px solid var(--border); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); display: none; max-height: 190px; overflow: auto; }
@@ -837,7 +838,7 @@
 
 <header>
   <h1><span style="color: #FFD54F; font-weight: 700;">Alti-Vent</span> — Rosace orographique selon NF EN 1991-1-4</h1>
-  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude · v3.1</p>
+  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude · v3.2</p>
 </header>
 
 <div class="disclaimer">
@@ -1005,7 +1006,7 @@
     </div>
     <details id="altiEdit">
       <summary>🔧 Corriger les altitudes du maillage 3D (en cas d'anomalie IGN)</summary>
-      <p style="font-size:11px; color:var(--text2); margin:6px 0;">Valeurs en m NGF, lignes = Nord → Sud, colonnes = Ouest → Est. Une case modifiée devient orange ; le rendu 3D se met à jour immédiatement. Le bouton 🌊 écrête <b>à la fois</b> le maillage 3D et les profils de calcul EC1 (rosace, coupes, ΔA<sub>c</sub>) — les corrections manuelles case par case, elles, ne touchent que le rendu 3D. Attention aux vraies dépressions (Camargue, polders) : là, ne pas écrêter.</p>
+      <p style="font-size:11px; color:var(--text2); margin:6px 0;">Valeurs en m NGF, lignes = Nord → Sud, colonnes = Ouest → Est. Une case modifiée devient orange ; le rendu 3D se met à jour immédiatement. Une case <b>bleue</b> est une altitude négative en bord de mer recalée automatiquement à 0 m (même règle que pour la rosace) ; survolez-la pour lire la valeur IGN d'origine. Le bouton 🌊 écrête <b>à la fois</b> le maillage 3D et les profils de calcul EC1 (rosace, coupes, ΔA<sub>c</sub>) — les corrections manuelles case par case, elles, ne touchent que le rendu 3D. Attention aux vraies dépressions (Camargue, polders) : là, ne pas écrêter.</p>
       <div style="margin-bottom:6px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
         <button id="altiReset3d" style="font-size:11px; padding:3px 10px;">↺ Réinitialiser aux valeurs IGN</button>
         <button id="altiClamp0" style="font-size:11px; padding:3px 10px;" title="Ramène toute altitude négative à 0 m NGF — maillage 3D ET profils EC1 (rosace, coupes, ΔAc)">🌊 Tout &lt; 0 m → 0 m (rosace + terrain)</button>
@@ -1245,7 +1246,7 @@
    Les anciens noms (API_ALTI, RES, WMTS…) restent disponibles comme alias :
    le reste du code Alti-Vent n'est pas modifié.
    ============================================================================ */
-const ALTI_VENT_VERSION = '3.1';
+const ALTI_VENT_VERSION = '3.2';
 
 const GPF = {
   alti: {
@@ -1439,7 +1440,14 @@ function gpfElevations(data, expected) {
   return data.elevations;
 }
 
-function gpfIsNoData(z) { return z === -99999 || typeof z !== 'number' || !isFinite(z); }
+/* v3.2 — Zones non couvertes par le MNT (mer, hors emprise).
+   L'IGN les marque par -99999, mais d'autres valeurs « bouche-trou » apparaissent
+   près des côtes (-9999, -1000…). Le point le plus bas de France métropolitaine
+   est vers -10 m (étang de Lavalduc) : toute valeur sous -100 m ne peut pas être
+   une altitude terrestre, c'est un marqueur d'absence de donnée.
+   Les vraies dépressions (Camargue, polders : quelques mètres sous 0) restent intactes. */
+const GPF_NODATA_BELOW = -100;
+function gpfIsNoData(z) { return typeof z !== 'number' || !isFinite(z) || z <= GPF_NODATA_BELOW; }
 
 // ---- Tuiles WMTS ----
 function gpfTileURL(bm, zoom, row, col, tms) {
@@ -1835,23 +1843,32 @@ function parseLatLon(str) {
  * Marque chaque point modifié avec p.zRaw (valeur originale) et p.clampedCoastal.
  */
 function clampCoastalProfiles(profiles, k = 3) {
+  // v3.2 — un point négatif est recalé s'il est à ±k points de la mer, OU s'il appartient
+  // à une bande continue d'altitudes négatives qui rejoint la mer (estran, vasière, polder
+  // ouvert sur la mer). Une dépression séparée de la mer par du terrain ≥ 0 m est conservée.
   let totalClamped = 0;
   profiles.forEach(pr => {
     const prof = pr.profile;
-    for (let i = 0; i < prof.length; i++) {
+    const n = prof.length;
+    const neg = i => !prof[i].isSea && prof[i].z !== null && prof[i].z < 0;
+    const coastal = new Array(n).fill(false);
+    // Graines : points négatifs à ±k points d'un point en mer
+    for (let i = 0; i < n; i++) {
+      if (!neg(i)) continue;
+      for (let j = Math.max(0, i - k); j <= Math.min(n - 1, i + k); j++) {
+        if (prof[j].isSea) { coastal[i] = true; break; }
+      }
+    }
+    // Propagation le long des bandes négatives contiguës
+    for (let i = 1; i < n; i++) if (coastal[i - 1] && neg(i)) coastal[i] = true;
+    for (let i = n - 2; i >= 0; i--) if (coastal[i + 1] && neg(i)) coastal[i] = true;
+    for (let i = 0; i < n; i++) {
+      if (!coastal[i]) continue;
       const p = prof[i];
-      if (p.isSea || p.z === null || p.z >= 0) continue;
-      // z < 0 et terre : chercher voisin isSea dans la fenêtre ±k
-      let nearSea = false;
-      for (let j = Math.max(0, i - k); j <= Math.min(prof.length - 1, i + k); j++) {
-        if (prof[j].isSea) { nearSea = true; break; }
-      }
-      if (nearSea) {
-        p.zRaw = p.z;
-        p.z = 0;
-        p.clampedCoastal = true;
-        totalClamped++;
-      }
+      p.zRaw = p.z;
+      p.z = 0;
+      p.clampedCoastal = true;
+      totalClamped++;
     }
   });
   return totalClamped;
@@ -1876,13 +1893,16 @@ async function fetchProfile(lat0, lon0, brngDeg, radius, sampling) {
   const elevations = gpfElevations(data);
   const n = elevations.length;
   return elevations.map((p, i) => {
-    const noData = gpfIsNoData(p.z);   // -99999 = zone non couverte (mer) ; valeur absente traitée de même
-    return {
+    const noData = gpfIsNoData(p.z);   // -99999, -9999, -1000… = zone non couverte (mer) ; valeur absente traitée de même
+    const pt = {
       d: i * (radius / (n - 1)),
       z: noData ? 0 : p.z,
       lat: p.lat, lon: p.lon,
       isSea: noData
     };
+    // v3.2 — trace d'un marqueur atypique (autre que -99999), affichée dans la fenêtre du point
+    if (noData && typeof p.z === 'number' && isFinite(p.z) && p.z !== SEA_VALUE) pt.noDataRaw = p.z;
+    return pt;
   });
 }
 
@@ -3035,7 +3055,10 @@ function showPointDetails(p, evt) {
     '  <div class="pp-row"><span class="pp-key">Distance au site</span><span class="pp-val">' + dSign + p.d.toFixed(0) + ' m</span></div>' +
     '  <div class="pp-row"><span class="pp-key">Altitude</span><span class="pp-val"><b>' + (p.z !== null ? p.z.toFixed(1) : '?') + ' m</b></span></div>' +
     '  <div class="pp-row"><span class="pp-key">Coordonnées GPS</span><span class="pp-val">' + p.lat.toFixed(6) + ', ' + p.lon.toFixed(6) + '</span></div>' +
-    '  <div class="pp-row"><span class="pp-key">Type</span><span class="pp-val">' + (p.isSea ? '🌊 Mer (z = 0 par convention)' : '🏞 Terre') + '</span></div>' +
+    '  <div class="pp-row"><span class="pp-key">Type</span><span class="pp-val">' + (p.isSea ? (p.noDataRaw !== undefined
+               ? '🌊 Hors couverture IGN (valeur reçue : ' + p.noDataRaw + ' m) — mer, z = 0 par convention'
+               : '🌊 Mer (z = 0 par convention)')
+             : '🏞 Terre') + '</span></div>' +
     catLine +
     clampNote +
     '</div>' +
@@ -4212,6 +4235,9 @@ document.getElementById('run').addEventListener('click', async () => {
   msg += '. ';
   if (seaMajority > 0) msg += '<span style="color:var(--text2);">' + seaMajority + ' direction(s) majoritairement en mer (traitée comme terrain plat z=0).</span> ';
   if (nClamped > 0) msg += '<span style="color:var(--teal);">' + nClamped + ' altitude(s) côtière(s) recalée(s) à 0 m (correction automatique).</span> ';
+  // v3.2 — zones non couvertes signalées par une valeur atypique (-9999, -1000…)
+  const nOddNoData = allProfiles.reduce((a, pr) => a + pr.profile.filter(p => p.noDataRaw !== undefined).length, 0);
+  if (nOddNoData > 0) msg += '<span style="color:var(--teal);">' + nOddNoData + ' point(s) hors couverture IGN (valeur atypique reçue) traité(s) comme mer à 0 m.</span> ';
   if (c0req > 0) msg += '<span class="badge-ko">' + c0req + ' direction(s) ≥ 3° → calcul orographique requis.</span>';
   else if (allProfiles.filter(p => p.analysis.status === 'ok').length > 0) msg += '<span class="badge-ok">Toutes les directions sous 3° — c₀ = 1.</span>';
   status.innerHTML = msg;
@@ -5307,13 +5333,14 @@ const T3D = (() => {
     for (let i = 0; i < gridN; i++) {
       const row = [], seaRow = [];
       for (let j = 0; j < gridN; j++, n++) {
-        const sea = zs[n] === SEA_VALUE || zs[n] === null || zs[n] === undefined;
+        const sea = gpfIsNoData(zs[n]);   // v3.2 — même règle que les profils EC1 (-99999, -9999, -1000…)
         seaRow.push(sea);
         row.push(sea ? 0 : zs[n]);
       }
       gridZraw.push(row); gridSea.push(seaRow);
     }
     gridZ = gridZraw.map(r => r.slice());
+    autoClampGrid();   // v3.2 — correction littorale automatique, même règle que la rosace
     const c = (gridN - 1) / 2;
     zRef = gridZ[Math.round(c)][Math.round(c)];
   }
@@ -5595,9 +5622,11 @@ const T3D = (() => {
       html += '<tr><th>L' + (i + 1) + '</th>';
       for (let j = 0; j < gridN; j++) {
         const edited = gridZ[i][j] !== gridZraw[i][j];
-        const sea = gridSea[i][j] ? ' title="Point en mer (RGE ALTI hors couverture)"' : '';
+        const auto = edited && gridAuto && gridAuto[i][j] && gridZ[i][j] === 0;
+        const tip = gridSea[i][j] ? ' title="Point en mer (RGE ALTI hors couverture)"'
+                  : auto ? ' title="Altitude IGN ' + gridZraw[i][j].toFixed(1) + ' m recalée à 0 m (correction littorale automatique)"' : '';
         html += '<td><input type="number" step="0.1" value="' + gridZ[i][j].toFixed(1) +
-                '" data-i="' + i + '" data-j="' + j + '" class="' + (edited ? 'edited' : '') + '"' + sea + '></td>';
+                '" data-i="' + i + '" data-j="' + j + '" class="' + (auto ? 'auto' : edited ? 'edited' : '') + '"' + tip + '></td>';
       }
       html += '</tr>';
     }
@@ -5609,10 +5638,46 @@ const T3D = (() => {
         const val = parseFloat(inp.value);
         if (isNaN(val)) { inp.value = gridZ[i][j].toFixed(1); return; }
         gridZ[i][j] = val;
+        inp.classList.remove('auto');
+        inp.removeAttribute('title');
         inp.classList.toggle('edited', val !== gridZraw[i][j]);
         rebuildScene();
       });
     });
+  }
+
+  // v3.2 — Correction littorale automatique du maillage, même règle que les profils EC1 :
+  // une case négative est recalée à 0 m si elle est à moins de ~150 m d'une case en mer,
+  // ou si elle appartient à une zone continue d'altitudes négatives qui rejoint la mer.
+  // Une dépression entourée de terrain ≥ 0 m (Camargue, polder fermé) est conservée.
+  let gridAuto = null, nAuto3d = 0;
+  function autoClampGrid() {
+    gridAuto = gridZ.map(r => r.map(() => false));
+    nAuto3d = 0;
+    const step = (2 * half) / Math.max(1, gridN - 1);
+    const k = Math.max(1, Math.ceil(150 / step));
+    const neg = (i, j) => !gridSea[i][j] && gridZ[i][j] < 0;
+    const queue = [];
+    for (let i = 0; i < gridN; i++)
+      for (let j = 0; j < gridN; j++) {
+        if (!neg(i, j)) continue;
+        let near = false;
+        for (let a = Math.max(0, i - k); a <= Math.min(gridN - 1, i + k) && !near; a++)
+          for (let b = Math.max(0, j - k); b <= Math.min(gridN - 1, j + k); b++)
+            if (gridSea[a][b]) { near = true; break; }
+        if (near) { gridAuto[i][j] = true; queue.push([i, j]); }
+      }
+    while (queue.length) {
+      const [i, j] = queue.pop();
+      for (let a = i - 1; a <= i + 1; a++)
+        for (let b = j - 1; b <= j + 1; b++) {
+          if (a < 0 || b < 0 || a >= gridN || b >= gridN || gridAuto[a][b] || !neg(a, b)) continue;
+          gridAuto[a][b] = true; queue.push([a, b]);
+        }
+    }
+    for (let i = 0; i < gridN; i++)
+      for (let j = 0; j < gridN; j++)
+        if (gridAuto[i][j]) { gridZ[i][j] = 0; nAuto3d++; }
   }
 
   // Écrêtage du maillage 3D seul (idempotent) — retourne le nb de points corrigés
@@ -5634,8 +5699,17 @@ const T3D = (() => {
     if (gridZ) {
       gridZ.forEach(r => r.forEach(z => { if (z < 0) { n++; if (z < zmin) zmin = z; } }));
     }
-    if (n > 0) {
-      warn.innerHTML = '⚠ <b>' + n + '</b> altitude(s) négative(s) dans le maillage (min ' + zmin.toFixed(1) + ' m) — artefact MNT probable, ou vraie dépression (à vous de juger).';
+    const parts = [];
+    if (gridAuto && nAuto3d > 0) {
+      parts.push('<span style="color:var(--teal);">🌊 <b>' + nAuto3d + '</b> case(s) côtière(s) recalée(s) à 0 m automatiquement (cases bleues ; « Réinitialiser » rend les valeurs IGN).</span>');
+    }
+    if (n > 0 && gridAuto) {
+      parts.push('⚠ <b>' + n + '</b> altitude(s) négative(s) conservée(s), loin de la mer (min ' + zmin.toFixed(1) + ' m) — vraie dépression probable (Camargue, polder), à vous de juger.');
+    } else if (n > 0) {
+      parts.push('⚠ <b>' + n + '</b> altitude(s) négative(s) — valeurs IGN brutes, sans correction automatique (min ' + zmin.toFixed(1) + ' m). Le bouton 🌊 les ramène toutes à 0 m ; « Recalculer le maillage » réapplique la correction littorale.');
+    }
+    if (parts.length) {
+      warn.innerHTML = parts.join(' ');
       warn.style.display = 'inline';
     } else {
       warn.style.display = 'none';
@@ -5645,6 +5719,7 @@ const T3D = (() => {
   document.getElementById('altiReset3d').addEventListener('click', () => {
     if (!gridZraw) return;
     gridZ = gridZraw.map(r => r.slice());
+    gridAuto = null; nAuto3d = 0;   // v3.2 — retour aux valeurs IGN brutes, correction automatique annulée
     buildAltiTable();
     rebuildScene();
     updateNegWarn();
