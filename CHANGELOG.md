@@ -1,5 +1,26 @@
 # Changelog Alti-Vent
 
+## v3.3.0 — Novembre 2026 — Soutien Ko-fi
+
+### Ajouts
+- Bouton discret **« ☕ Payer un coup »** en pied de page, à côté de
+  « Tester les accès IGN » : ouvre la page Ko-fi de l'auteur
+  (ko-fi.com/jeanpineau) dans un nouvel onglet
+- Petite fenêtre de remerciement, **non bloquante**, toutes les
+  10 ouvertures de l'outil (10, 20, 30…) : un message tiré au hasard
+  parmi six, avec les boutons « Payer un café » et « Plus tard »
+  (la touche Échap la ferme aussi)
+
+### Confidentialité
+- Le nombre d'ouvertures est compté **uniquement dans votre navigateur**
+  (`localStorage`, clé `nb_utilisations_alti-vent`) ; aucune donnée
+  n'est envoyée à un serveur
+- En navigation privée ou sans stockage local : ni compteur, ni fenêtre
+
+### Inchangé
+- Calculs EC1, analyse, vue 3D, exports et accès IGN (v3.2)
+
+
 ## v3.2.0 — Novembre 2026 — Correction automatique des altitudes littorales
 
 En bord de mer, le MNT IGN ne renvoie pas toujours la valeur « mer »

@@ -98,6 +98,7 @@ L'outil est entièrement contenu dans un seul fichier HTML : aucune installation
 ```
 alti-vent/
 ├── index.html              ← l'outil complet, version en cours (autonome, ~400 KB)
+├── alti-vent-v3.3.0.html   ← archive de la version 3.3.0
 ├── alti-vent-v3.2.0.html   ← archive de la version 3.2.0
 ├── alti-vent-v3.1.0.html   ← archive de la version 3.1.0
 ├── alti-vent-v2.3.0.html   ← archive de la version 2.3.0

@@ -838,7 +838,7 @@
 
 <header>
   <h1><span style="color: #FFD54F; font-weight: 700;">Alti-Vent</span> — Rosace orographique selon NF EN 1991-1-4</h1>
-  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude · v3.2</p>
+  <p>Analyse automatique du relief autour d'un site via l'API IGN Géoplateforme — fond de carte IGN intégré — J.Pineau + Claude · v3.3</p>
 </header>
 
 <div class="disclaimer">
@@ -1246,7 +1246,7 @@
    Les anciens noms (API_ALTI, RES, WMTS…) restent disponibles comme alias :
    le reste du code Alti-Vent n'est pas modifié.
    ============================================================================ */
-const ALTI_VENT_VERSION = '3.2';
+const ALTI_VENT_VERSION = '3.3';
 
 const GPF = {
   alti: {
@@ -6171,6 +6171,142 @@ const GpfDiag = (() => {
 
   btn.addEventListener('click', run);
   return { run };
+})();
+</script>
+
+<script>
+/* =====================================================================
+   SOUTIEN KO-FI (injection v3.3)
+   - Bouton discret « ☕ Payer un coup » dans le pied de page
+   - Compteur d'ouvertures stocké uniquement dans ce navigateur
+     (localStorage), jamais envoyé à un serveur
+   - Petite pop-up de remerciement non bloquante toutes les 10 ouvertures
+   Aucun calcul ni aucun autre comportement d'Alti-Vent n'est modifié.
+   ===================================================================== */
+(function () {
+  const KOFI_URL = 'https://ko-fi.com/jeanpineau';
+  const COUNT_KEY = 'nb_utilisations_alti-vent';
+
+  // --- Style (sobre, palette Alti-Vent) ---
+  const css = document.createElement('style');
+  css.textContent =
+    '.kofi-btn { font-size:11px; padding:3px 10px; margin-left:6px; text-decoration:none; display:inline-block;' +
+    ' border:0.5px solid var(--border); border-radius:4px; color:var(--text2); background:var(--card); }' +
+    '.kofi-btn:hover, .kofi-btn:focus-visible { color:var(--color-info); background:var(--formbg); }' +
+    '.kofi-pop { position:fixed; right:16px; bottom:16px; z-index:9000; max-width:340px; box-sizing:border-box;' +
+    ' background:var(--card); color:var(--text); border:0.5px solid var(--border); border-left:3px solid var(--color-info);' +
+    ' border-radius:8px; box-shadow:0 4px 18px rgba(0,0,0,0.14); padding:14px 16px; font-size:13px; line-height:1.45;' +
+    ' opacity:0; transform:translateY(10px); transition:opacity .25s ease, transform .25s ease; }' +
+    '.kofi-pop.show { opacity:1; transform:none; }' +
+    '.kofi-pop p { margin:0 0 12px; }' +
+    '.kofi-actions { display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }' +
+    '.kofi-actions a, .kofi-actions button { font-size:12px; padding:6px 12px; border-radius:4px; cursor:pointer;' +
+    ' text-decoration:none; border:0.5px solid var(--border); background:var(--card); color:var(--text); }' +
+    '.kofi-actions a { background:var(--color-info); border-color:var(--color-info); color:#fff; }' +
+    '@media (max-width: 480px) { .kofi-pop { left:16px; right:16px; max-width:none; } }' +
+    '@media (prefers-reduced-motion: reduce) { .kofi-pop { transition:none; } }';
+  document.head.appendChild(css);
+
+  // --- 1. Bouton « Payer un coup » ---
+  const btn = document.createElement('a');
+  btn.className = 'kofi-btn';
+  btn.href = KOFI_URL;
+  btn.target = '_blank';
+  btn.rel = 'noopener';
+  btn.textContent = '☕ Payer un coup';
+  btn.setAttribute('aria-label', 'Soutenir Alti-Vent : payer un café à l\'auteur sur Ko-fi (ouvre un nouvel onglet)');
+  const bar = document.getElementById('gpfDiagBar');
+  const footer = document.querySelector('footer');
+  if (bar) {
+    const diagBtn = document.getElementById('gpfDiagBtn');
+    if (diagBtn) diagBtn.insertAdjacentElement('afterend', btn); else bar.appendChild(btn);
+  } else if (footer) {
+    const wrap = document.createElement('div');
+    wrap.style.marginTop = '10px';
+    wrap.appendChild(btn);
+    footer.appendChild(wrap);
+  }
+
+  // --- 2. Compteur d'ouvertures (local, une fois par chargement de page) ---
+  let count = 0;
+  try {
+    count = (parseInt(localStorage.getItem(COUNT_KEY), 10) || 0) + 1;
+    localStorage.setItem(COUNT_KEY, String(count));
+  } catch (e) {
+    return;   // stockage indisponible (navigation privée…) : pas de compteur, pas de pop-up
+  }
+
+  // --- 3. Pop-up de remerciement tous les 10 usages ---
+  if (count % 10 !== 0) return;
+
+  const messages = [
+    'Cette app a l\'air de vous plaire ! N\'hésitez pas à me faire vos retours et à me payer un café ☕',
+    'Vous avez ouvert Alti-Vent ' + count + ' fois ! Si l\'outil vous rend service, un café ☕ m\'aide à continuer de l\'améliorer.',
+    'Merci de votre fidélité à Alti-Vent ! Vos retours sont précieux… et un café ☕ fait toujours plaisir.',
+    'Alti-Vent est développé sur mon temps libre. S\'il vous est utile, vous pouvez me payer un café ☕',
+    'Le vent tourne, le café aussi ☕ Si Alti-Vent vous sert sur vos chantiers, un petit soutien est le bienvenu !',
+    'Une idée d\'amélioration, une erreur repérée ? Dites-le-moi ! Et si le cœur vous en dit, un café ☕'
+  ];
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+
+  function show() {
+    const pop = document.createElement('div');
+    pop.className = 'kofi-pop';
+    pop.setAttribute('role', 'status');
+    pop.setAttribute('aria-live', 'polite');
+
+    const p = document.createElement('p');
+    p.textContent = msg;
+    const actions = document.createElement('div');
+    actions.className = 'kofi-actions';
+    const later = document.createElement('button');
+    later.type = 'button';
+    later.textContent = 'Plus tard';
+    const pay = document.createElement('a');
+    pay.href = KOFI_URL;
+    pay.target = '_blank';
+    pay.rel = 'noopener';
+    pay.textContent = '☕ Payer un café';
+    actions.appendChild(later);
+    actions.appendChild(pay);
+    pop.appendChild(p);
+    pop.appendChild(actions);
+    document.body.appendChild(pop);
+
+    // Sur mobile, si la page est plus large que l'écran, le navigateur dézoome :
+    // on cale alors la pop-up sur la partie réellement visible de l'écran.
+    const vv = window.visualViewport;
+    function place() {
+      if (!vv || vv.width >= window.innerWidth - 1) {
+        pop.style.left = pop.style.top = pop.style.width = pop.style.maxWidth = '';
+        pop.style.right = pop.style.bottom = '';
+        return;
+      }
+      const w = Math.min(340, vv.width - 32);
+      pop.style.right = pop.style.bottom = 'auto';
+      pop.style.maxWidth = 'none';
+      pop.style.width = w + 'px';
+      pop.style.left = (vv.offsetLeft + vv.width - w - 16) + 'px';
+      pop.style.top = (vv.offsetTop + vv.height - pop.offsetHeight - 16) + 'px';
+    }
+    place();
+    if (vv) { vv.addEventListener('resize', place); vv.addEventListener('scroll', place); }
+    requestAnimationFrame(() => pop.classList.add('show'));
+
+    function close() {
+      if (vv) { vv.removeEventListener('resize', place); vv.removeEventListener('scroll', place); }
+      document.removeEventListener('keydown', onKey);
+      pop.classList.remove('show');
+      setTimeout(() => pop.remove(), 260);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    later.addEventListener('click', close);
+    pay.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+  }
+
+  // Laisse la page s'installer avant d'afficher le message
+  setTimeout(show, 2500);
 })();
 </script>
 </body></html>
